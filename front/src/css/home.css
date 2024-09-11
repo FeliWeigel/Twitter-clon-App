@@ -1,0 +1,120 @@
+.h-container {
+    height: auto;
+}
+
+.home {
+    height: auto;
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    background-color: #05131C;
+    column-gap: 2rem;
+    padding: 1.6rem 0;
+} 
+
+.h-card {
+    padding: .8rem 1.1rem !important;
+    width: 100%;
+    background-color: #1d2b35 !important;
+}
+
+.h-profile-card, .h-card-whofollow, .h-card-trends {
+    width: 290px;
+    height: auto;
+    position: fixed;
+    background-color: #1d2b35 !important;
+    border-radius: 10px !important;
+}
+
+.h-profile-card {
+    max-height: 340px;
+    top: 3.5rem;
+    left: 2rem;
+}
+
+.h-card-whofollow {
+    height: 155px;
+    max-height: 300px;
+    bottom: 1rem;
+    left: 2rem;
+}
+
+.h-card-trends {
+    top: 3.5rem;
+    right: 2rem;
+}
+
+.h-card-new-post{
+    padding: 1.05rem 1.1rem !important;
+    border-radius: 10px !important;
+}
+
+.h-profile-link {
+    color: #1ea2f5;
+    font-weight: 400;
+    font-size: .95rem;
+    letter-spacing: .01rem;
+}
+
+.h-follow-btn {
+    background-color: #fff;
+    color: #000;
+    font-size: .85rem;
+    font-weight: 400;
+    border-radius: 20px;
+    padding: 5px 14px;
+}
+
+.h-recomend-link, .h-trends-link {
+    display: flex;
+    justify-content: flex-start;
+    color: #1ea2f5;
+}
+
+.h-recomend-link {
+    padding: .15rem 0 0 1rem;
+}
+
+.h-trends-link {
+    padding-top: .7rem;
+    font-size: .87rem;
+}
+
+.post-option-add {
+    display: flex;
+    align-items: center;
+    padding: 6px 27px;
+    font-size: .88rem;
+    color: #ccc;
+    gap: .5rem;
+    border: 1px solid #cccccc5c;
+    box-shadow: 0px 0px 3px 0px #a1a1a16a;
+    border-radius: 30px;
+    transition: .4s;
+}
+
+.post-option-add:hover {
+    box-shadow: 0px 0px 5px 0px #a1a1a1ae;
+}
+
+.trend {
+    cursor: pointer;
+    padding-left: .5rem;
+    transition: .4s;
+}
+
+.trend:hover {
+    background: #21313d ;
+}
+
+.trend-name {
+    color: #fff !important;
+    font-weight: 400 !important;
+    font-size: .95rem !important;
+}
+
+.trend-stats {
+    color: rgba(255,255,255, .4) !important;
+    font-size: .8rem !important;
+    font-weight: 300 !important;
+}

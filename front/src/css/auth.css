@@ -1,0 +1,52 @@
+.auth-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-top-left-radius: 11px;
+    border-bottom-left-radius: 11px;
+}
+
+.auth-link {
+    color: #1a90d99c;
+    display: flex;
+    justify-content: center;
+    border: none;
+    outline: none;
+    text-decoration: none;
+    transition: .4s;
+}
+
+.auth-link:hover {
+    color: #1a90d9;
+}
+
+.auth-icon {
+    width: 200px;
+    border: 1;
+}
+
+.auth-input input:-webkit-autofill {
+    height: 40px;
+    padding: 0 0 0 10px;
+    background-color: #15202B;
+}
+
+.success-register-link {
+    display: flex;
+    align-items: center;
+    gap: .2rem;
+    font-size: .9rem;
+    color: #055689;
+    text-decoration: none;
+    transition: .3s;
+}
+
+.success-register-link:hover {
+    color: #002a43;
+}
+
+.login-error-alert {
+    position: absolute;
+    bottom: 1rem;
+    left: -5rem;
+}
