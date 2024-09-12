@@ -1,7 +1,5 @@
 package com.app.twitterclon.user;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +17,6 @@ public class UserDTO {
     private String username;
     private String email;
     private Date birthdate;
-    private String description;
     private String password;
+    private String description;
 }

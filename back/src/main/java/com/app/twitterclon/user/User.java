@@ -1,5 +1,6 @@
 package com.app.twitterclon.user;
 
+import com.app.twitterclon.post.Post;
 import com.app.twitterclon.security.jwt.Token;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -19,7 +20,7 @@ import java.util.List;
 @Builder
 @Entity
 @AllArgsConstructor @NoArgsConstructor
-public class User  implements UserDetails {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,10 +30,13 @@ public class User  implements UserDetails {
     private String username;
     private String email;
     private Date birthdate;
-    private String description;
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Post> posts;
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
@@ -44,7 +48,7 @@ public class User  implements UserDetails {
     }
     @Override
     public String getUsername() {
-        return this.username;
+        return this.email;
     }
 
     @Override

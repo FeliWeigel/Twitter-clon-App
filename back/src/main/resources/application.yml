@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -18,3 +18,23 @@ application:
       expiration: 900000
       refresh-token:
         expiration: 900000
+main:
+  servlet:
+    multipart:
+      max-file-size: 52428800
+      max-request-size: 52428800
+  codec:
+    max-in-memory-size: 52428800
+server:
+  tomcat:
+    max-swallow-size: 52428800
+aws:
+  access:
+    key:
+      id: ${AWS_ACCESS_KEY_ID}
+  secret:
+    key: ${AWS_SECRET_ACCESS_KEY}
+  region: sa-east-1
+  s3:
+    bucket:
+      name: twitter-clon-app

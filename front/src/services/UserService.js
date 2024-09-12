@@ -7,9 +7,6 @@ const UserService = {
             headers: {
                 Authorization: `Bearer ${token}`
             }
-        }).catch(err => {
-            console.error(err);
-            throw err;
         })
 
         return res.data;

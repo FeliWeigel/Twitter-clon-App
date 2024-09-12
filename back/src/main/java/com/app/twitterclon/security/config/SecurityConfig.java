@@ -21,15 +21,8 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(){
-        return input -> {
-            if (input.contains("@")) {
-                return userRepository.findByEmail(input)
-                        .orElseThrow(() -> new UsernameNotFoundException("user with email: " + input + " not found"));
-            } else {
-                return userRepository.findByUsername(input)
-                        .orElseThrow(() -> new UsernameNotFoundException("user with username: " + input + " not found"));
-            }
-        };
+        return username ->  userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("user with email: " + username + " not found"));
     }
 
     @Bean

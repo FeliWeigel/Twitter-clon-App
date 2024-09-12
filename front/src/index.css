@@ -53,6 +53,14 @@ a, input, button {
   z-index: 1000;
 }
 
+.show-alert {
+  opacity: 1 !important;
+}
+
+.new-post-alert {
+  animation-name: opacityUnDisplay;
+  animation-duration: 7s;
+}
 
 @keyframes opacityDisplay {
     0% {
@@ -62,4 +70,14 @@ a, input, button {
     100% {
       opacity: 1;
     }
+}
+
+@keyframes opacityUnDisplay {
+  100% {
+    opacity: 0;
+  }
+
+  0% {
+    opacity: 1;
+  }
 }
