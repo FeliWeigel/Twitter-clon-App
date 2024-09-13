@@ -5,4 +5,5 @@ export const loginEndPoint = `${ApiURL}/auth/login`
 
 export const userProfileEndPoint = `${ApiURL}/user/profile`
 
+export const getFeedEndPoint = `${ApiURL}/post/feed`
 export const uploadPostEndPoint = `${ApiURL}/post/new`

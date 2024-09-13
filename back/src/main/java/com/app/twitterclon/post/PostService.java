@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,21 +23,8 @@ public class PostService {
     private final S3Service s3Service;
     private final UserService userService;
 
-    public String uploadPost(PostDTO postDTO){
-        Long userId = userService.getAuthenticatedUserId();
-        validatePostText(postDTO.getText());
-        String fileName = null;
-
-        if(postDTO.getFile() == null || postDTO.getFile().isEmpty()){
-            Post newPost = buildPost(null, postDTO.getText(), null, userId);
-            postRepository.save(newPost);
-            return "Your post has been shared successfully!";
-        }
-
-        fileName = fileUploadInPost(postDTO.getFile(), userId);
-        Post newPost = buildPost(postDTO.getFile().getContentType(), postDTO.getText(), fileName, userId);
-        postRepository.save(newPost);
-        return "Your post has been shared successfully!";
+    private List<Post> getAllPost(){
+        return postRepository.findAll();
     }
     private void validatePostText(String text){
         if(text.length() > 200){
@@ -80,6 +68,31 @@ public class PostService {
 
         return postBuilder.build();
     }
+
+    public List<Post> getFeed(){
+        List<Post> allPosts = getAllPost();
+
+        allPosts.sort((p1, p2) -> p2.getDate().compareTo(p1.getDate()));
+        return allPosts;
+    }
+
+    public String uploadPost(PostDTO postDTO){
+        Long userId = userService.getAuthenticatedUserId();
+        validatePostText(postDTO.getText());
+        String fileName = null;
+
+        if(postDTO.getFile() == null || postDTO.getFile().isEmpty()){
+            Post newPost = buildPost(null, postDTO.getText(), null, userId);
+            postRepository.save(newPost);
+            return "Your post has been shared successfully!";
+        }
+
+        fileName = fileUploadInPost(postDTO.getFile(), userId);
+        Post newPost = buildPost(postDTO.getFile().getContentType(), postDTO.getText(), fileName, userId);
+        postRepository.save(newPost);
+        return "Your post has been shared successfully!";
+    }
+
 }
 
 

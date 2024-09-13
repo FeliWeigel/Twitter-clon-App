@@ -150,10 +150,14 @@ const NewPostCard = () => {
                     </Box>
                     {
                         photoPreviewURL ? (
-                            <img src={photoPreviewURL} alt="Photo Preview" style={{ maxWidth: '100%', maxHeight: '300px' }} />
+                            <Box width={'100%'} textAlign={'center'} paddingTop={'1rem'}>
+                                <img src={photoPreviewURL} className="newpost-photo-preview" alt="Photo Preview"/>
+                            </Box>
                         ) 
                         : videoPreviewURL ? (
-                            <video src={videoPreviewURL} alt="Video Preview" style={{ maxWidth: '100%', maxHeight: '300px' }} />
+                            <Box textAlign={'center'} paddingTop={'1rem'}>
+                                <video src={videoPreviewURL} autoPlay className="newpost-video-preview" alt="Video Preview"/>
+                            </Box>
                         ) 
                         : null
                     }
@@ -169,6 +173,8 @@ const NewPostCard = () => {
                         <Box 
                             component={'button'} 
                             className="post-option-add"
+                            type="button"
+                            onClick={handleInputFileClick}
                         >
                             <FaVideo className="post-photo-icon" size={20} color="rgb(25, 25, 255)" /> Video
                         </Box>
