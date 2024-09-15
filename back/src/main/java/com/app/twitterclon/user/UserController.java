@@ -16,7 +16,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/profile")
-    public ResponseEntity<User> getAuthUser(){
+    public ResponseEntity<UserDTO> getAuthUser(){
         return ResponseEntity.ok(userService.getAuthenticatedUser());
     }
 }

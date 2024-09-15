@@ -7,13 +7,15 @@ import com.app.twitterclon.s3.S3Service;
 import com.app.twitterclon.user.User;
 import com.app.twitterclon.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +33,7 @@ public class PostService {
             throw new InvalidPostException("The post cannot exceed 200 characters in length.");
         }
     }
+
     private String fileUploadInPost(MultipartFile file, Long userId){
         String contentType = file.getContentType();
         if (!isContentTypeSupported(contentType)) {
@@ -69,11 +72,18 @@ public class PostService {
         return postBuilder.build();
     }
 
-    public List<Post> getFeed(){
-        List<Post> allPosts = getAllPost();
-
-        allPosts.sort((p1, p2) -> p2.getDate().compareTo(p1.getDate()));
-        return allPosts;
+    public Page<Post> getFeed(Pageable pageable){
+        Page<Post> pagedPosts = postRepository.findAll(pageable);
+        return pagedPosts.map(post -> {
+            if(post.getImageId() != null){
+                String fileUrl = s3Service.generatePresignedUrl(post.getImageId());
+                post.setFileUrl(fileUrl);
+            }else if(post.getVideoId() != null){
+                String fileUrl = s3Service.generatePresignedUrl(post.getVideoId());
+                post.setFileUrl(fileUrl);
+            }
+            return post;
+        });
     }
 
     public String uploadPost(PostDTO postDTO){

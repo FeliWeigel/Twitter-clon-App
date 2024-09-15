@@ -18,13 +18,12 @@ const PostService = {
 
         return res.data;
     },
-    getFeed: async (token) => {
-        const res = await axios.get(getFeedEndPoint, PostService.config(token)).catch(err => {
-            console.error(err);
+    getFeed: async (token, page, size) => {
+        const response = await axios.get(`${getFeedEndPoint}?page=${page}&size=${size}`, PostService.config(token))
+        .catch(err => {
             throw err;
-        })
-
-        return res.data;
+        });
+        return response.data;
     }
     /////
 };

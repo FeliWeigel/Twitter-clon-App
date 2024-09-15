@@ -135,21 +135,21 @@ public class AuthService {
     }
 
     public ResponseEntity<AuthResponse> login(AuthRequest authRequest){
-        if(authRequest.getEmail().isBlank() || authRequest.getPassword().isBlank()){
+        if(authRequest.getUsername().isBlank() || authRequest.getPassword().isBlank()){
             throw new NullFieldsException("Warning! Fields cannot be null. Please, complete all credentials.");
         }
         try{
             Authentication auth = authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            authRequest.getEmail(),
+                            authRequest.getUsername(),
                             authRequest.getPassword()
                     )
             );
         } catch (AuthenticationException ex) {
-            throw new InvalidCredentialsException("Incorrect email or password, please try again.");
+            throw new InvalidCredentialsException("Incorrect username or password, please try again.");
         }
 
-        var user = userRepository.findByEmail(authRequest.getEmail())
+        var user = userRepository.findByUsername(authRequest.getUsername())
                 .orElseThrow();
         var accessToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);

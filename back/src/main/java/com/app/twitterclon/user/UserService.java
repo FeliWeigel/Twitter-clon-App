@@ -16,7 +16,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User getAuthenticatedUser() {
+    public UserDTO getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -24,9 +24,18 @@ public class UserService {
         }
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        return userRepository.findByEmail(userDetails.getUsername())
+        User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        UserDTO userDTO = UserDTO.builder()
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .birthdate(user.getBirthdate())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .description(user.getDescription())
+                .build();
+        return userDTO;
+
     }
 
     public Long getAuthenticatedUserId() {
@@ -37,7 +46,7 @@ public class UserService {
         }
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        User user = userRepository.findByEmail(userDetails.getUsername())
+        User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         return user.getId();

@@ -33,7 +33,7 @@ public class S3Service {
         }
     }
 
-    public InputStream downloadFile(String key) {
+    public InputStream getFile(String key) {
         try {
             GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                     .bucket(bucketName)
@@ -54,6 +54,19 @@ public class S3Service {
             s3Client.deleteObject(deleteObjectRequest);
         } catch (S3Exception e) {
             throw new RuntimeException("Error deleting file from S3", e);
+        }
+    }
+
+    public String generatePresignedUrl(String key) {
+        try {
+            GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .build();
+
+            return s3Client.utilities().getUrl(builder -> builder.bucket(bucketName).key(key).build()).toString();
+        } catch (S3Exception e) {
+            throw new RuntimeException("Error generating pre-signed URL", e);
         }
     }
 }

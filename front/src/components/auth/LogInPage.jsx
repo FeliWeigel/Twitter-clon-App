@@ -13,7 +13,7 @@ import axios from "axios"
 export const LogInPage = () => {
     const [request, setRequest] = useState(
         {
-            email: "",
+            username: "",
             password: ""
         }
     );
@@ -89,7 +89,7 @@ export const LogInPage = () => {
                         <FaTwitter size={40} color="#1a90d9" ></FaTwitter>
                     </Box>
 
-                        <TextField className="auth-input" onChange={handleInputChange} label="email" name="email" type="email"
+                        <TextField className="auth-input" onChange={handleInputChange} label="Username" name="username" type="text"
                             sx={{
                                 '& .MuiInputBase-root': {
                                     height: '40px',

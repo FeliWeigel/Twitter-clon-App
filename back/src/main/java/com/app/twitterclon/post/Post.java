@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
@@ -24,7 +23,7 @@ public class Post {
     private String text;
     private String imageId;
     private String videoId;
-
+    private String fileUrl;
 
     @ManyToOne
     @JoinColumn(name = "userId")
