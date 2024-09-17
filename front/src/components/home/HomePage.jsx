@@ -12,6 +12,7 @@ import TrendsCard from "./TrendsCard.jsx"
 import Nav from "../nav/Nav"
 import PostCard from "./PostCard.jsx"
 import PostService from "../../services/PostService.js"
+import Loading from "../../utils/Loading.jsx"
 
 const HomePage = () => {
   const [userProfile, setUserProfile] = useState(null);
@@ -22,15 +23,14 @@ const HomePage = () => {
   const [feed, setFeed] = useState([]);
   const [hasMore, setHasMore] = useState(true); 
   const [newPosts, setNewPosts] = useState([]); 
+  const [newPostLength, setNewPostLength] = useState(0)
   const scrollTargetRef = useRef(null); 
+  const loadNewPostsBtn = useRef(null);
 
   //inicializar el feed y los datos de usuario
   const initializeFeed = useCallback(async () => {
     const token = sessionStorage.getItem("acc_token");
-    if (!token) {
-      setLoading(false);
-      return;
-    }
+    
     if (!userProfile) {
       const profile = await UserService.getUserProfile(token);
       setUserProfile(profile);
@@ -40,56 +40,70 @@ const HomePage = () => {
     const res = await PostService.getFeed(token, 0, size);
     const initialFeed = res.content || [];
     setFeed(initialFeed);
-    setPage(1); // Empezamos desde la página 1 (la 0 ya se cargó)
-    setHasMore(initialFeed.length >= size); // Determinar si hay más posts
+    setPage(1); // Empezamos desde la página 1 (la 0 ya se cargo)
+    setHasMore(initialFeed.length >= size); // Determino si hay mas posts
     setLoading(false);
   }, [userProfile, size]);
 
-  // definir si hay nuevos posts y setearlos
-  const fetchNewPosts = useCallback(async () => {
+  useEffect(() => {
+    initializeFeed();
+  }, [initializeFeed])
+
+  // Detecto nuevos posts y, en caso de disponibilidad, le sugiero al usuario cargarlos al principio del feed (esta solicitud se hara en intervalos de tiempo especificos) 
+  const recomendNewPosts = useCallback(async () => {
     const token = sessionStorage.getItem("acc_token");
-    const res = await PostService.getFeed(token, 0, size); // Consulta los últimos posts
-    const latestPosts = res.content || [];
+    const lastPostDate = feed.length > 0 ? feed[0].date : null;
 
-    const currentFeed = feed;
-    const unseenPosts = latestPosts.filter(post => !currentFeed.some(p => p.id === post.id));
+    if (!lastPostDate) return;
 
-    if (unseenPosts.length > 0) {
-      setNewPosts(unseenPosts);
+    const res = await PostService.getNewPosts(token, lastPostDate); // Consulta los últimos posts
+    const unseenPosts = res || []
+    const unseenFiltered = unseenPosts.filter(post => !feed.some(f => f.id === post.id));
+
+    if (unseenFiltered.length > 5) {
+      setNewPostLength(unseenFiltered.length)
+      setNewPosts(unseenFiltered)
     }
-  }, [feed, size]);
+  },[feed])
 
-  //cargar una nueva pagina de posts
+  // Cargo los nuevos post al principio del feed
+  const fetchNewPosts = useCallback(() => { 
+    setFeed(prevFeed => [...newPosts, ...prevFeed]); 
+    setNewPostLength(0);
+    setNewPosts([]);
+  
+  }, [newPosts]);
+
+  //Carga de una nueva pagina de posts al scrollear hacia abajo 
+  // (me aseguro de cargar una cantidad limitada de datos y no tener que fetchear todos los post almacenados, lo que generaria muchos problemas de rendimiento por la cantidad de datos que se estarian solicitando)
   const fetchNewPage = useCallback(async () => {
     if (!hasMore || loading) return;
 
     const token = sessionStorage.getItem("acc_token");
     const res = await PostService.getFeed(token, page, size);
     const newFeed = res.content || [];
+    const newFeedFiltered = newFeed.filter(post => !feed.some(f => f.id === post.id));
 
-    setFeed(prevFeed => [...prevFeed, ...newFeed]); // Añadir nuevos posts al final
+    setFeed(prevFeed => [...prevFeed, ...newFeedFiltered]); // Añadir nuevos posts al final
     setPage(prevPage => prevPage + 1); // Incrementar la página
     setHasMore(newFeed.length >= size); // Verificar si hay más posts
     setLoading(false);
   }, [page, size, hasMore, loading]);
 
+  // Polling. Recurrentemente hago una peticion para detectar nuevos posts y sugerirle al usuario cargarlos en feed
   useEffect(() => {
-    initializeFeed();
-  }, [initializeFeed])
-
-
-  useEffect(() => {
-    const interval = setInterval(fetchNewPosts, 10000)
+    const interval = setInterval(recomendNewPosts, 20000)
   
     return () => clearInterval(interval);
-  }, [fetchNewPosts]); 
+  }, [recomendNewPosts]); 
 
+  // Observer para la deteccion de scroll por parte del usuario.
   useEffect( () => {
     const observer = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && !loading) {
         fetchNewPage();
       }
-    }, { threshold: 1.0 });
+    }, { threshold: 0.8 });
     
     const target = scrollTargetRef.current;
     
@@ -107,9 +121,9 @@ const HomePage = () => {
         <Box className="home">
            <Box position={"relative"} width={'25%'}>
               {loading ? 
-                <Typography typography={'p'} textAlign={'center'} color="#fff" marginTop={'7rem'} marginLeft={'2rem'} fontSize={'1.07rem'}>
-                  Loading...
-                </Typography>
+                <Box className="loading-container">
+                  <Loading size={'2rem'}/>
+                </Box>
               : 
                 
                 <ProfileCard user={userProfile}/>
@@ -124,19 +138,22 @@ const HomePage = () => {
               width={'53%'}
             >
               <NewPostCard/>
-             
-              {newPosts.map((post, index) => {
+
+              <Box className={`update-postlist-btn ${newPostLength > 5 ? 'display' : 'undisplay'}`} ref={loadNewPostsBtn} onClick={fetchNewPosts}>
+                  <Typography typography={'p'}>There are {newPostLength} new posts! Click to load.</Typography>
+              </Box> 
+
+              {feed.map((post) => {
                 return (
-                  <PostCard key={index} post={post}/>
+                 <PostCard key={post.id} post={post}/>
                 )
               })}
 
-              {feed.map((post, index) => {
-                return (
-                 <PostCard key={index} post={post}/>
-                )
-              })}
-              {loading && <Typography typography={'p'} color="#fff">Loading...</Typography>}
+              {loading && 
+                <Box className="loading-container">
+                  <Loading size={'2rem'}/>
+                </Box>
+              }
               <Box ref={scrollTargetRef}></Box>
            </Box>
            <Box position={"relative"} width={'25%'}>

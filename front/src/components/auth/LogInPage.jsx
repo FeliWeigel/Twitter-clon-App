@@ -4,11 +4,12 @@ import "../../css/auth.css"
 
 import  authBg from "../../assets/imgs/registerWall.png"
 import { Alert, Box, Button, TextField } from "@mui/material"
-import { Link, Navigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { FaTwitter } from "react-icons/fa";
 import { useState } from "react"
 import { loginEndPoint } from "../../utils/ApiURLs"
 import axios from "axios"
+import { useAuth } from "./AuthProvider"
 
 export const LogInPage = () => {
     const [request, setRequest] = useState(
@@ -17,9 +18,10 @@ export const LogInPage = () => {
             password: ""
         }
     );
-    const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
     const [response, setResponse] = useState("");
+    const { login } = useAuth();  // Uso de la función login del contexto
+    const navigate = useNavigate(); 
 
     const handleInputChange = (e) => {
         setRequest(request => ({
@@ -36,16 +38,14 @@ export const LogInPage = () => {
         const URL = loginEndPoint;
         axios.post(URL, request)
         .then(res => {
-            const success = res.status === 200 ? true : false;
-            if(success){
+            if(res.status === 200){
+                const accessToken = res.data.access_token
                 setError(false);
-                setSuccess(true);
-                sessionStorage.setItem('acc_token', res.data.access_token);
-                sessionStorage.setItem('ref_token', res.data.refresh_token);
+                login(accessToken);
+                navigate("/home")
             }
         })
         .catch(err => {
-            setSuccess(false);
             setError(true);
             setResponse(err.response.data);
         })
@@ -138,9 +138,7 @@ export const LogInPage = () => {
                     
                     <Link to="/auth/register" className="auth-link">You still don't have an account? register!</Link>
                     {
-                            success ? 
-                                <Navigate to="/home"/> 
-                            : error ? 
+                            error ? 
                                 <Alert className="alert login-error-alert" severity="error">{response}</Alert> 
                             : null
                     }

@@ -12,21 +12,24 @@ import com.app.twitterclon.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-
     private final TokenRepository tokenRepository;
     private final UserRepository userRepository;
     private final JwtService jwtService;
@@ -163,6 +166,27 @@ public class AuthService {
                         .build(),
                 HttpStatus.OK
         );
+    }
+
+    public String logout(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new AuthenticationCredentialsNotFoundException("No authenticated user found");
+        }
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        List<Token> userTokens = tokenRepository.allValidTokensByUser(user.getId());
+
+        userTokens.stream().forEach(token -> {
+            token.setExpired(true);
+            token.setRevoked(true);
+            tokenRepository.save(token);
+        });
+        SecurityContextHolder.clearContext();
+        return "Logout successfuly!";
     }
 
     private int calculateAge(java.util.Date birthdate) {

@@ -39,6 +39,19 @@ a, input, button {
   right: 1rem;
 }
 
+.loading-container {  
+  margin-top: 3rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-spinner {
+  color: #fff;
+  animation: spin 1s linear infinite;
+}
+
 .nav {
   width: 100%;
   height: 3.5rem;
@@ -62,6 +75,14 @@ a, input, button {
   animation-duration: 7s;
 }
 
+.display {
+  display: block;
+}
+
+.undisplay {
+  display: none;
+}
+
 @keyframes opacityDisplay {
     0% {
       opacity: 0;
@@ -79,5 +100,14 @@ a, input, button {
 
   0% {
     opacity: 1;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }

@@ -13,7 +13,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
     private final UserRepository userRepository;
 
     public UserDTO getAuthenticatedUser() {
@@ -35,7 +34,6 @@ public class UserService {
                 .description(user.getDescription())
                 .build();
         return userDTO;
-
     }
 
     public Long getAuthenticatedUserId() {

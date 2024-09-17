@@ -1,5 +1,5 @@
 import axios from "axios"
-import { getFeedEndPoint, uploadPostEndPoint } from "../utils/ApiURLs"
+import { getFeedEndPoint, getNewPostsEndPoint, uploadPostEndPoint } from "../utils/ApiURLs"
 
 
 const PostService = {
@@ -24,8 +24,14 @@ const PostService = {
             throw err;
         });
         return response.data;
+    },
+    getNewPosts: async (token, lastDate) => {
+        const response = await axios.get(`${getNewPostsEndPoint}?lastPostDate=${encodeURIComponent(lastDate)}`, PostService.config(token))
+        .catch(err => {
+            throw err;
+        });
+        return response.data;
     }
-    /////
 };
 
 export default PostService;

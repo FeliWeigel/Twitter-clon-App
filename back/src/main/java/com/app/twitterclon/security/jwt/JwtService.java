@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,14 @@ public class JwtService {
     private Long tokenExpiration;
     @Value("${application.security.jwt.refresh-token.expiration}")
     private Long refreshExpiration;
+
+    public String extractToken(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7); // Elimina el prefijo "Bearer "
+        }
+        return null;
+    }
 
     private Key getSigninKey(){
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);

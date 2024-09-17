@@ -10,6 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/post")
 @RequiredArgsConstructor
@@ -25,6 +28,14 @@ public class PostController {
     ){
         Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
         return ResponseEntity.ok(postService.getFeed(pageable));
+    }
+
+
+    @GetMapping("/feed/new")
+    public ResponseEntity<List<Post>> getNewPosts(
+            @RequestParam("lastPostDate") String lastPostDate
+    ){
+       return ResponseEntity.ok(postService.getNewPosts(lastPostDate));
     }
     @PostMapping(value = "/new", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadPost(

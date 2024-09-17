@@ -20,29 +20,25 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class SecurityAuthFilter extends OncePerRequestFilter {
-
     private final JwtService jwtService;
     private final TokenRepository tokenRepository;
     private final UserDetailsService userDetailsService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String userUsername;
-        final String authHeader = request.getHeader("Authorization");
         final String jwtToken;
-
         if(request.getServletPath().contains("/api/v1/auth")){
             filterChain.doFilter(request, response);
             return;
         }
 
-        if(authHeader == null || !authHeader.startsWith("Bearer ")){
+        jwtToken = jwtService.extractToken(request);
+        if(jwtToken == null){
             filterChain.doFilter(request, response);
             return;
         }
 
-        jwtToken = authHeader.substring(7);
         userUsername = jwtService.extractUsername(jwtToken);
-
         if(userUsername != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = userDetailsService.loadUserByUsername(userUsername);
 
