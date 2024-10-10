@@ -12,11 +12,14 @@ import java.sql.Date;
 @AllArgsConstructor @NoArgsConstructor
 public class UserDTO {
 
+
+
     private String firstname;
     private String lastname;
     private String username;
     private String email;
     private Date birthdate;
+    private String uploadDate;
     private String password;
     private String description;
 }

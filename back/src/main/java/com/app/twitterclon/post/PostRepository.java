@@ -13,4 +13,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findAll(Pageable pageable);
     @Query("SELECT p FROM Post p WHERE p.date > :lastDateTime")
     List<Post> findNewPosts(@Param("lastDateTime") LocalDateTime lastDateTime);
+
+    @Query("SELECT p FROM Post p WHERE p.user.username = :username")
+    Page<Post> getPostsByUser(@Param("username") String username, Pageable pageable);
 }

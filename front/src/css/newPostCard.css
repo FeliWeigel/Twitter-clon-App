@@ -1,0 +1,42 @@
+.post-option-add {
+    display: flex;
+    align-items: center;
+    padding: 6px 27px;
+    font-size: .88rem;
+    color: #ccc;
+    gap: .5rem;
+    border: 1px solid #cccccc5c;
+    box-shadow: 0px 0px 3px 0px #a1a1a16a;
+    border-radius: 30px;
+    transition: .4s;
+}
+
+.post-option-add:hover {
+    box-shadow: 0px 0px 5px 0px #a1a1a1ae;
+}
+
+.new-post-alert {
+    position: fixed;
+    top: 4.2rem;
+    right: 1.5rem;
+    width: 300px;
+    z-index: 10000;
+    transition: opacity 3s ease-in-out;
+    opacity: 0;
+}
+
+
+.new-post-alert.show-alert {
+    opacity: 1;
+}
+
+.newpost-photo-preview, .newpost-video-preview, .post-file {
+    width: 70%;
+    height: 240px;
+    object-fit: cover;
+}
+
+.newpost-video-preview {
+    padding: 0;
+    box-sizing: content-box;
+}

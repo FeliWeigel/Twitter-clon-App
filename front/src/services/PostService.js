@@ -1,5 +1,5 @@
 import axios from "axios"
-import { getFeedEndPoint, getNewPostsEndPoint, uploadPostEndPoint } from "../utils/ApiURLs"
+import { getFeedEndPoint, getNewPostsEndPoint, getUserPostsEndPoint, uploadPostEndPoint } from "../utils/ApiURLs"
 
 
 const PostService = {
@@ -31,6 +31,15 @@ const PostService = {
             throw err;
         });
         return response.data;
+    },
+    postsByUser: async (token, username, page) => {
+        const response = await axios.get(`${getUserPostsEndPoint}?username=${username}&page=${page}`, PostService.config(token))
+        .catch(err => {
+            console.log(err)
+            throw err
+        })
+
+        return response.data
     }
 };
 

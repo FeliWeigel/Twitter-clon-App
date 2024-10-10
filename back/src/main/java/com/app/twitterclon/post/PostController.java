@@ -2,6 +2,7 @@ package com.app.twitterclon.post;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -30,6 +30,15 @@ public class PostController {
         return ResponseEntity.ok(postService.getFeed(pageable));
     }
 
+    @GetMapping("/userfeed")
+    public ResponseEntity<PagedModel<PostDTO>> getPostsByUser(
+            @RequestParam("username") String username,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "15") int size
+    ){
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        return ResponseEntity.ok(postService.postByUser(username, pageable));
+    }
 
     @GetMapping("/feed/new")
     public ResponseEntity<List<Post>> getNewPosts(

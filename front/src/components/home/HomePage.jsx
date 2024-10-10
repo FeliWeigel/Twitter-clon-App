@@ -5,12 +5,12 @@ import "../../css/home.css"
 import { Box, Typography } from "@mui/material"
 
 import UserService from "../../services/UserService.js"
-import ProfileCard from "./ProfileCard.jsx"
-import WhoFollowCard from "./WhoFollowCard.jsx"
-import NewPostCard from "./NewPostCard.jsx"
-import TrendsCard from "./TrendsCard.jsx"
+import ProfileCard from "../cards/ProfileCard.jsx"
+import WhoFollowCard from "../cards/WhoFollowCard.jsx"
+import NewPostCard from "../cards/NewPostCard.jsx"
+import TrendsCard from "../cards/TrendsCard.jsx"
 import Nav from "../nav/Nav"
-import PostCard from "./PostCard.jsx"
+import PostCard from "../cards/PostCard.jsx"
 import PostService from "../../services/PostService.js"
 import Loading from "../../utils/Loading.jsx"
 
@@ -126,9 +126,9 @@ const HomePage = () => {
                 </Box>
               : 
                 
-                <ProfileCard user={userProfile}/>
+                <ProfileCard user={userProfile} propClass={'h-profile-card'}/>
               }
-              <WhoFollowCard/>
+              <WhoFollowCard propClass={'h-card-whofollow'}/>
            </Box>
            <Box 
               position={"relative"} 
@@ -137,7 +137,7 @@ const HomePage = () => {
               rowGap={'1.5rem'}
               width={'53%'}
             >
-              <NewPostCard/>
+              <NewPostCard propClass={'h-card-new-post'}/>
 
               <Box className={`update-postlist-btn ${newPostLength > 5 ? 'display' : 'undisplay'}`} ref={loadNewPostsBtn} onClick={fetchNewPosts}>
                   <Typography typography={'p'}>There are {newPostLength} new posts! Click to load.</Typography>
@@ -157,7 +157,7 @@ const HomePage = () => {
               <Box ref={scrollTargetRef}></Box>
            </Box>
            <Box position={"relative"} width={'25%'}>
-              <TrendsCard/>
+              <TrendsCard propClass={'h-card-trends'}/>
            </Box>
         </Box>
     </Box>

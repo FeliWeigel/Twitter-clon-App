@@ -8,6 +8,7 @@ import HomePage from './components/home/HomePage.jsx'
 import RegisterPage from './components/auth/RegisterPage.jsx'
 import LogInPage from './components/auth/LogInPage.jsx'
 import { AuthProvider } from './components/auth/AuthProvider.jsx'
+import UserProfilePage from './components/userProfile/UserProfilePage.jsx'
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <HomePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/user/profile',
+    element: (
+      <ProtectedRoute>
+        <UserProfilePage />
       </ProtectedRoute>
     ),
   },

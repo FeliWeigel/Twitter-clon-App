@@ -1,14 +1,16 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 
 import "../../index.css"
-import "../../css/home.css"
+import "../../css/trendsCard.css"
 import { Box, Card, Typography } from "@mui/material"
 import { Link } from "react-router-dom"
 import { FiTrendingUp } from "react-icons/fi";
 
-const TrendsCard = () => {
+const TrendsCard = ({propClass}) => {
   return (
-    <Card className="h-card h-card-trends">
+    <Card className={`h-card trends-card ${propClass}`}>
         <Box display={'flex'}  gap={'.4rem'} alignItems={'center'} width={'100%'}>
         <Typography typography={'p'} fontSize={'1rem'} color="#fff" letterSpacing={'.02rem'}>
             Trends for you

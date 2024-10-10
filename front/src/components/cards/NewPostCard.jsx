@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import "../../index.css";
-import "../../css/home.css";
+import "../../css/newPostCard.css";
 import PostService from "../../services/PostService.js";
 
 import { Alert, Box, Card } from "@mui/material";
@@ -9,7 +10,7 @@ import { FaVideo } from "react-icons/fa";
 import { IoCalendar } from "react-icons/io5";
 import { useEffect, useRef, useState } from "react";
 
-const NewPostCard = () => {
+const NewPostCard = ({propClass}) => {
     const [text, setText] = useState("");
     const [file, setFile] = useState(null);
     const [error, setError] = useState(false);
@@ -118,7 +119,7 @@ const NewPostCard = () => {
     },[error, success])
 
     return (
-        <Card className="h-card h-card-new-post">
+        <Card className={`h-card new-post-card ${propClass}`}>
             { 
                 error ? <Alert className={`new-post-alert ${error ? "show-alert" : ""}`} ref={errorAlert} severity="error">{message}</Alert> 
                 : success ? <Alert className={`new-post-alert ${success ? "show-alert" : ""}`} ref={successAlert}  severity="success">{message}</Alert> 

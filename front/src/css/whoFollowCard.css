@@ -1,0 +1,12 @@
+.whofollow-card {
+    height: 155px;
+    max-height: 300px;
+}
+
+
+.h-recomend-link {
+    display: flex;
+    justify-content: flex-start;
+    color: #1ea2f5;
+    padding: .15rem 0 0 1rem;
+}

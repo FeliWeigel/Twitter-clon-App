@@ -23,7 +23,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -113,13 +117,16 @@ public class AuthService {
         if (calculateAge(registerRequest.getBirthdate()) < 18) {
             throw new InvalidCredentialsException("Error! You must be over 18 years old to register.");
         }
-
+        LocalDate dateNow = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM 'of' YYYY", new Locale("en", "EN"));
+        String uploadDate = dateNow.format(formatter);
         var user = User.builder()
                 .username(registerRequest.getUsername())
                 .firstname(registerRequest.getFirstname())
                 .lastname(registerRequest.getLastname())
                 .email(registerRequest.getEmail())
                 .birthdate(registerRequest.getBirthdate())
+                .uploadDate(uploadDate)
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .role(Role.USER)
                 .build();

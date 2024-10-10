@@ -9,3 +9,4 @@ export const userProfileEndPoint = `${ApiURL}/user/profile`
 export const getFeedEndPoint = `${ApiURL}/post/feed`
 export const getNewPostsEndPoint = `${ApiURL}/post/feed/new`
 export const uploadPostEndPoint = `${ApiURL}/post/new`
+export const getUserPostsEndPoint = `${ApiURL}/post/userfeed`

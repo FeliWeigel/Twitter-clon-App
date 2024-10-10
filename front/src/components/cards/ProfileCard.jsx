@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
 import "../../index.css"
-import "../../css/home.css"
+import "../../css/profileCard.css"
 import { Box, Card, Typography } from "@mui/material"
 import { Link } from "react-router-dom"
 
-const ProfileCard = ({user}) => {
+const ProfileCard = ({user, propClass}) => {
   return (
-    <Card className="h-profile-card">
+    <Card className={`profile-card ${propClass}`}>
         <Box 
         sx={{
             background: '#000',
@@ -68,28 +68,28 @@ const ProfileCard = ({user}) => {
             columnGap: '1.2rem'
         }}>
             <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
-            <Typography typography={'p'} color="#fff" fontSize={'1rem'}>
-                1.923
-            </Typography>
-            <Typography typography={'p'} color="rgba(255,255,255, .55)" fontSize={'.8rem'} fontWeight={'300'}>
-                Following
-            </Typography>
+                <Typography typography={'p'} color="#fff" fontSize={'1rem'}>
+                    1.923
+                </Typography>
+                <Typography typography={'p'} color="rgba(255,255,255, .55)" fontSize={'.8rem'} fontWeight={'300'}>
+                    Following
+                </Typography>
             </Box>
 
             <Box height={'2.7rem'} width={'1px'} sx={{background: 'rgba(255,255,255, .2)'}}></Box>
             
             <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
-            <Typography typography={'p'} color="#fff" fontSize={'1rem'}>
-                7.486
-            </Typography>
-            <Typography typography={'p'} color="rgba(255,255,255, .55)" fontSize={'.8rem'} fontWeight={'300'}>
-                Followers
-            </Typography>
+                <Typography typography={'p'} color="#fff" fontSize={'1rem'}>
+                    7.486
+                </Typography>
+                <Typography typography={'p'} color="rgba(255,255,255, .55)" fontSize={'.8rem'} fontWeight={'300'}>
+                    Followers
+                </Typography>
             </Box>
         </Box>
 
         <Box display={'flex'} justifyContent={'center'} alignItems={'center'} padding={'1.1rem'} >
-        <Link className="h-profile-link" to="/profile">My profile</Link>
+            <Link className="h-profile-link" to="/user/profile">My profile</Link>
         </Box>
     </Card>
   )

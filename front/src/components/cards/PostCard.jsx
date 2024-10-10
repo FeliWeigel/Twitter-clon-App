@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import "../../index.css"
-import "../../css/home.css"
+import "../../css/postCard.css"
 
 import { formatDistanceToNow } from "date-fns";
 
@@ -12,7 +12,7 @@ import { FaCommentDots } from "react-icons/fa";
 import { IoStatsChart } from "react-icons/io5";
 import { BsBookmarkPlusFill } from "react-icons/bs";
 
-const PostCard = ({post}) => {
+const PostCard = ({post, propClass}) => {
     const [postDate, setPostDate] = useState(post.date)
 
     useEffect(() => {
@@ -21,7 +21,7 @@ const PostCard = ({post}) => {
     }, [post.date]);
 
     return (
-        <Card className="h-card h-card-post">
+        <Card className={`h-card post-card ${propClass}`}>
             <Box sx={{
                 width: '47px',
                 height: '47px',

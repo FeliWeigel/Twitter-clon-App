@@ -5,19 +5,21 @@ import com.app.twitterclon.exception.FileUploadException;
 import com.app.twitterclon.exception.InvalidPostException;
 import com.app.twitterclon.s3.S3Service;
 import com.app.twitterclon.user.User;
+import com.app.twitterclon.user.UserDTO;
 import com.app.twitterclon.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import org.springframework.hateoas.PagedModel;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -109,6 +111,34 @@ public class PostService {
         Post newPost = buildPost(postDTO.getFile().getContentType(), postDTO.getText(), fileName, userId);
         postRepository.save(newPost);
         return "Your post has been shared successfully!";
+    }
+
+    public PagedModel<PostDTO> postByUser(String userUsername, Pageable pageable){
+        Optional<User> user = userService.getUserByUsername(userUsername);
+        if(!user.isPresent()){
+            throw new UsernameNotFoundException("user not found");
+        }
+        Page<Post> userPostPage = postRepository.getPostsByUser(userUsername, pageable);
+        List<PostDTO> postDTOs = userPostPage.getContent().stream().map(post -> {
+            return PostDTO.builder()
+                    .text(post.getText())
+                    .fileURL(post.getFileUrl())
+                    .date(post.getDate())
+                    .user(
+                            UserDTO.builder()
+                                    .firstname(post.getUser().getFirstname())
+                                    .lastname(post.getUser().getLastname())
+                                    .username(post.getUser().getUsername())
+                                    .build()
+                    )
+                    .build();
+
+        }).collect(Collectors.toList());
+        return PagedModel.of(postDTOs, new PagedModel.PageMetadata(
+                userPostPage.getSize(),
+                userPostPage.getNumber(),
+                userPostPage.getTotalElements(),
+                userPostPage.getTotalPages()));
     }
 
 }

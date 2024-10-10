@@ -1,11 +1,13 @@
+/* eslint-disable react/prop-types */
 import "../../index.css"
-import "../../css/home.css"
+import "../../css/whoFollowCard.css"
 import { Box, Card, Typography } from "@mui/material"
 import { Link } from "react-router-dom"
+import FollowBtn from "../btn/FollowBtn"
 
-const WhoFollowCard = () => {
+const WhoFollowCard = ({propClass}) => {
   return (
-    <Card className="h-card-whofollow">
+    <Card className={`whofollow-card ${propClass}`}>
         <Typography typography={'p'} fontSize={'.95rem'} padding={'.4rem 1.1rem .1rem 1.1rem'} color="#fff" letterSpacing={'.02rem'}>
             Who is to follow you
         </Typography>
@@ -32,7 +34,7 @@ const WhoFollowCard = () => {
                 </Box>
             </Box>
             
-            <Box component={'button'} className="h-follow-btn">Follow</Box>
+            <FollowBtn/>
             </Box>
             <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} padding={'.5rem 1.1rem'} 
             sx={{
@@ -51,12 +53,12 @@ const WhoFollowCard = () => {
                     backgroundColor: '#ccc'
                 }}></Box>
                 <Box display={'flex'} flexDirection={'column'}>
-                <Typography typography={'p'} color="#fff" fontSize={'.88rem'} lineHeight={'.6rem'}>Jhon Doe</Typography>
-                <Typography typography={'p'} color="rgba(255,255,255, .4)" fontSize={'.75rem'} fontWeight={'300'}>@jhond1987</Typography>
+                    <Typography typography={'p'} color="#fff" fontSize={'.88rem'} lineHeight={'.6rem'}>Jhon Doe</Typography>
+                    <Typography typography={'p'} color="rgba(255,255,255, .4)" fontSize={'.75rem'} fontWeight={'300'}>@jhond1987</Typography>
                 </Box>
             </Box>
             
-            <Box component={'button'} className="h-follow-btn">Follow</Box>
+            <FollowBtn/>
             </Box>
         </Box>
         <Box fontSize={'.8rem'}>

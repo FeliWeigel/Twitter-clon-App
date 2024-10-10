@@ -1,0 +1,30 @@
+.h-trends-link {
+    display: flex;
+    justify-content: flex-start;
+    color: #1ea2f5;
+    padding-top: .7rem;
+    font-size: .87rem;
+}
+
+
+.trend {
+    cursor: pointer;
+    padding-left: .5rem;
+    transition: .4s;
+}
+
+.trend:hover {
+    background: #21313d ;
+}
+
+.trend-name {
+    color: #fff !important;
+    font-weight: 400 !important;
+    font-size: .95rem !important;
+}
+
+.trend-stats {
+    color: rgba(255,255,255, .4) !important;
+    font-size: .8rem !important;
+    font-weight: 300 !important;
+}
