@@ -1,6 +1,5 @@
 package com.app.twitterclon.post;
 
-import com.app.twitterclon.user.User;
 import com.app.twitterclon.user.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +16,9 @@ public class PostDTO {
 
     private String text;
     private MultipartFile file;
-    private String fileURL;
+    private String fileUrl;
+    private String imageId;
+    private String videoId;
     private LocalDateTime date;
     private UserDTO user;
 }

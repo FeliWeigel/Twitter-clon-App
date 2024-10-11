@@ -120,10 +120,12 @@ public class PostService {
         }
         Page<Post> userPostPage = postRepository.getPostsByUser(userUsername, pageable);
         List<PostDTO> postDTOs = userPostPage.getContent().stream().map(post -> {
-            return PostDTO.builder()
+            PostDTO postDTO = PostDTO.builder()
                     .text(post.getText())
-                    .fileURL(post.getFileUrl())
+                    .fileUrl(post.getFileUrl())
                     .date(post.getDate())
+                    .imageId(post.getImageId())
+                    .videoId(post.getVideoId())
                     .user(
                             UserDTO.builder()
                                     .firstname(post.getUser().getFirstname())
@@ -132,8 +134,16 @@ public class PostService {
                                     .build()
                     )
                     .build();
-
+            if(post.getImageId() != null){
+                String fileUrl = s3Service.generatePresignedUrl(post.getImageId());
+                postDTO.setFileUrl(fileUrl);
+            }else if(post.getVideoId() != null){
+                String fileUrl = s3Service.generatePresignedUrl(post.getVideoId());
+                postDTO.setFileUrl(fileUrl);
+            }
+            return postDTO;
         }).collect(Collectors.toList());
+
         return PagedModel.of(postDTOs, new PagedModel.PageMetadata(
                 userPostPage.getSize(),
                 userPostPage.getNumber(),

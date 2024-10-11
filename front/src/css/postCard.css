@@ -87,5 +87,6 @@
 
 .post-file {
     width: 80%;
+    object-fit: cover;
     margin-top: .5rem;
 }

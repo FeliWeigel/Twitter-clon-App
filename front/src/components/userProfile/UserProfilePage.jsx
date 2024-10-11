@@ -20,13 +20,14 @@ const UserProfilePage = () => {
    const [userFeed, setUserFeed] = useState([]);
    const scrollTargetRef = useRef(null); 
    const [page, setPage] = useState(0);
+   const [activeSection, setActiveSection] = useState('Posts')
+   const sections = ['Posts', 'Posts and Replies', 'Multimedia', 'Likes']
 
    const fetchNewPage = useCallback(async () => {
       const token = sessionStorage.getItem("acc_token");
       if(userDetails && token){
          const res = await PostService.postsByUser(token, userDetails.username, page);
          const newFeed = res._embedded.postDTOes || [];
-
      
          setUserFeed(prevFeed => [...prevFeed, ...newFeed]); 
          setPage(prevPage => prevPage + 1); 
@@ -87,8 +88,10 @@ const UserProfilePage = () => {
                   display={'flex'} 
                   flexDirection={'column'}
                   rowGap={'1.5rem'}
-                  width={'53%'}
-                  padding={'0 1rem'}
+                  width={'50%'}
+                  padding={'1rem'}
+                  borderLeft={'1px solid rgba(255,255,255,.1)'}
+                  borderRight={'1px solid rgba(255,255,255,.1)'}
                >
                   {loading ? <Loading size={30}/> : 
                   
@@ -114,6 +117,26 @@ const UserProfilePage = () => {
                               <Box component={'button'} className="profile-btn edit-profile-btn">Edit Profile</Box>
                               {userDetails === "a" ? <FollowBtn prop={'profile-btn'}/> : null}
                               {userDetails === "a" ? <FollowingBtn prop={'profile-btn'}/> : null}
+
+                              <Box
+                                 display={'flex'}
+                                 alignItems={'center'}
+                                 marginTop={'1rem'}
+                                 justifyContent={'space-evenly'}
+                                 columnGap={'0'}
+                              >
+
+                                 {sections.map(section => (
+                                    <Box 
+                                       key={section}
+                                       component={'button'}
+                                       className={`profile-sections-btn ${activeSection === section ? 'profile-sections-btn-active' : ""}`}
+                                       onClick={() => setActiveSection(section)}
+                                    >
+                                       {section}
+                                    </Box>
+                                 ))}
+                              </Box>
                               
                         </Box>
                      </Box>
