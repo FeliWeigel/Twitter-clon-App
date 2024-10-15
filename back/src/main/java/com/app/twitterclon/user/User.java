@@ -59,6 +59,7 @@ public class User implements UserDetails {
     private Set<User> following;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "following")
+    @JsonIgnore
     private Set<User> followers;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

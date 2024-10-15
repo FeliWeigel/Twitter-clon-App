@@ -45,20 +45,20 @@ const WhoFollowCard = ({propClass}) => {
                 }
             }} 
             >
-            <Box display={'flex'} alignItems={'center'} columnGap={'1rem'}>
-                <Box sx={{ 
-                    width: '35px',
-                    height: '35px',
-                    borderRadius: '50%',
-                    backgroundColor: '#ccc'
-                }}></Box>
-                <Box display={'flex'} flexDirection={'column'}>
-                    <Typography typography={'p'} color="#fff" fontSize={'.88rem'} lineHeight={'.6rem'}>Jhon Doe</Typography>
-                    <Typography typography={'p'} color="rgba(255,255,255, .4)" fontSize={'.75rem'} fontWeight={'300'}>@jhond1987</Typography>
+                <Box display={'flex'} alignItems={'center'} columnGap={'1rem'}>
+                    <Box sx={{ 
+                        width: '35px',
+                        height: '35px',
+                        borderRadius: '50%',
+                        backgroundColor: '#ccc'
+                    }}></Box>
+                    <Box display={'flex'} flexDirection={'column'}>
+                        <Typography typography={'p'} color="#fff" fontSize={'.88rem'} lineHeight={'.6rem'}>Jhon Doe</Typography>
+                        <Typography typography={'p'} color="rgba(255,255,255, .4)" fontSize={'.75rem'} fontWeight={'300'}>@jhond1987</Typography>
+                    </Box>
                 </Box>
-            </Box>
-            
-            <FollowBtn/>
+                
+                <FollowBtn/>
             </Box>
         </Box>
         <Box fontSize={'.8rem'}>
