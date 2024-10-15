@@ -32,7 +32,7 @@ const HomePage = () => {
     const token = sessionStorage.getItem("acc_token");
     
     if (!userProfile) {
-      const profile = await UserService.getUserProfile(token);
+      const profile = await UserService.getAuthUserProfile(token);
       setUserProfile(profile);
     }
 

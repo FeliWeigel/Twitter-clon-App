@@ -23,8 +23,8 @@ const PostCard = ({post, propClass}) => {
     return (
         <Card className={`h-card post-card ${propClass}`}>
             <Box sx={{
-                width: '47px',
-                height: '47px',
+                width: '44px',
+                height: '44px',
                 borderRadius: '50%',
                 backgroundColor: '#ccc'
             }}></Box>
@@ -34,7 +34,7 @@ const PostCard = ({post, propClass}) => {
                 flexDirection={'column'}
                 paddingTop={'.4rem'}
                 rowGap={'.8rem'}
-                width={'90%'}
+                width={'87%'}
             >
                 <Box>
                     <Box display={'flex'} gap={'.5rem'} alignItems={'center'}>

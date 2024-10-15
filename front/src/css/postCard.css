@@ -1,6 +1,7 @@
 .post-card {
     display: flex;
     gap: 1.3rem;
+    width: 100%;
 }
 
 .post-btn {

@@ -13,15 +13,19 @@ import Loading from "../../utils/Loading"
 import FollowBtn from "../btn/FollowBtn"
 import FollowingBtn from "../btn/FollowingBtn"
 import PostService from "../../services/PostService"
+import { useParams } from "react-router-dom"
 
 const UserProfilePage = () => {
    const [userDetails, setUserDetails] = useState(null);
+   const [numberOfFollowers, setNumberOfFollowers] = useState(0)
+   const [numberOfFollowing, setNumberOfFollowing] = useState(0)
    const [loading, setLoading] = useState(true);
    const [userFeed, setUserFeed] = useState([]);
    const scrollTargetRef = useRef(null); 
    const [page, setPage] = useState(0);
    const [activeSection, setActiveSection] = useState('Posts')
    const sections = ['Posts', 'Posts and Replies', 'Multimedia', 'Likes']
+   const userUsername = useParams('username').username
 
    const fetchNewPage = useCallback(async () => {
       const token = sessionStorage.getItem("acc_token");
@@ -39,9 +43,14 @@ const UserProfilePage = () => {
       const token = sessionStorage.getItem("acc_token")
       const fetchUserDetails = async () => {
          if(token){
-            const res = await UserService.getUserProfile(token);
-            setUserDetails(res)
-            setLoading(false)
+            const res = await UserService.getAllUserDetails(token, userUsername);
+            console.log(res)
+            if(res){
+               setUserDetails(res.profile)
+               setNumberOfFollowers(res.followers)
+               setNumberOfFollowing(res.following)
+               setLoading(false)
+            }
          }else {
             setLoading(true)
          }
@@ -112,8 +121,47 @@ const UserProfilePage = () => {
                               <Typography typography={'p'} fontSize={'1.4rem'} fontWeight={'500'} color="#fff">{userDetails.firstname} {userDetails.lastname}</Typography>
                               <Typography typography={'p'} color="rgba(255,255,255, .4)" marginBottom={'.2rem'}>@{userDetails.username}</Typography>
                               <Typography typography={'p'} color="rgba(255,255,255, .55)" marginBottom={'.5rem'}>Joined in {userDetails.uploadDate}.</Typography>
-                              <Typography typography={'p'} color="#fff">{userDetails.description}ashkdahdg asdagjsd asdgasjd asdsagdvas dashf asfdhas fhasfjfh adasdashd !!!</Typography>
+                              <Typography typography={'p'} color="#fff" marginBottom={'1rem'}>{userDetails.description}</Typography>
+                              <Box 
+                                 display={'flex'}
+                                 alignItems={'center'} 
+                                 columnGap={'.7rem'}
+                              >
+                                 <Box
+                                    display={'flex'}
+                                    alignItems={'center'}
+                                    gap={'.5rem'}
+                                 >
+                                    <Typography typography={'p'} color="#fff" fontSize={'.95rem'} fontWeight={'300'}>
+                                       Following
+                                    </Typography>
+                                    
+                                    <Typography typography={'p'} color="#fff" fontSize={'1rem'} fontWeight={'400'}>
+                                       {numberOfFollowing}
+                                    </Typography>
+                                 </Box>
 
+                                 <Box
+                                    width={'1px'}
+                                    height={'25px'}
+                                    sx={{backgroundColor: 'rgba(255,255,255, .2)'}}
+                                 >
+                                 </Box>
+
+                                 <Box
+                                    display={'flex'}
+                                    alignItems={'center'}
+                                    gap={'.5rem'}
+                                 >
+                                    <Typography typography={'p'} color="#fff" fontSize={'.95rem'} fontWeight={'300'}>
+                                       Followers
+                                    </Typography>
+                                    <Typography typography={'p'} color="#fff" fontSize={'1rem'} fontWeight={'400'}>
+                                       {numberOfFollowers}
+                                    </Typography>
+                                 </Box>
+                              </Box>
+                              
                               <Box component={'button'} className="profile-btn edit-profile-btn">Edit Profile</Box>
                               {userDetails === "a" ? <FollowBtn prop={'profile-btn'}/> : null}
                               {userDetails === "a" ? <FollowingBtn prop={'profile-btn'}/> : null}

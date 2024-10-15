@@ -89,7 +89,7 @@ const ProfileCard = ({user, propClass}) => {
         </Box>
 
         <Box display={'flex'} justifyContent={'center'} alignItems={'center'} padding={'1.1rem'} >
-            <Link className="h-profile-link" to="/user/profile">My profile</Link>
+            <Link className="h-profile-link" to={`/user/profile/${user.username}`}>My profile</Link>
         </Box>
     </Card>
   )

@@ -28,7 +28,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/user/profile',
+    path: '/user/profile/:username',
     element: (
       <ProtectedRoute>
         <UserProfilePage />
