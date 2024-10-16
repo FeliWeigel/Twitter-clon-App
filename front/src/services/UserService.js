@@ -36,6 +36,7 @@ const UserService = {
     },
     getFollowersPage: async (token, username, page) => {
         const res = await axios.get(`${userFollowersEndPoint + username}?page=${page}`, UserService.config(token)).catch(err => {throw err})
+        console.log(res)
         return res.data
     },
     getAllUserDetails: async (token, username) => {

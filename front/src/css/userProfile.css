@@ -58,7 +58,7 @@
     padding: .6rem .7rem;
     font-size: 1rem;
     font-weight: 500;
-    color: #fff;
+    color: #ffffff65;
     transition: color 0.3s ease-in-out; /* Transición para el texto */
     border: none;
     background: none;
@@ -73,6 +73,10 @@
     height: 2px;
     background-color: rgb(2, 168, 224); 
     transition: width 0.25s ease-in-out; 
+}
+
+.profile-sections-btn-active {
+    color: #fff; 
 }
 
 .profile-sections-btn-active::after {

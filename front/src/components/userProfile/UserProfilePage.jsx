@@ -115,13 +115,13 @@ const UserProfilePage = () => {
                   component={'button'}
                   position={'absolute'}
                   top={'2rem'}
-                  left={'2.5rem'}
+                  left={'5rem'}
                   onClick={() => {
                      setShowFollowers(false)
                      setShowFollowing(false)
                   }}
                >
-                  <FaArrowLeft size={20} color="#fff"/>
+                  <FaArrowLeft size={25} color="#fff"/>
                </Box>
                {
                   showFollowing ? 
@@ -147,8 +147,11 @@ const UserProfilePage = () => {
                borderLeft={'1px solid rgba(255,255,255,.1)'}
                borderRight={'1px solid rgba(255,255,255,.1)'}
             >
-               {loading ? <Loading size={30}/> : 
-               
+               {loading ? 
+                  <Box width={'100%'} height={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+                     <Loading size={35}/>
+                  </Box>
+                  : 
                   <Box className="user-profile-data">
                      <Box className="portada">
                         <img className="portada-img" src={portada}/>
@@ -247,10 +250,10 @@ const UserProfilePage = () => {
                }
                
                {
-                  loading ? <Loading size={35}/> 
+                  loading ? null 
                      : 
                   userFeed.map((post) => (
-                     <PostCard key={`${post.date + post.text}`} post={post}/>
+                     <PostCard key={`${post.date}`} post={post}/>
                   ))
                }
 

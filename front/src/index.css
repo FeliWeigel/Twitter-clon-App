@@ -111,6 +111,24 @@ a, input, button {
   display: none;
 }
 
+.scroll-box::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scroll-box::-webkit-scrollbar-track {
+  background: #273b4a;
+  border-radius: 10px;
+}
+
+.scroll-box::-webkit-scrollbar-thumb {
+  background-color: #2f495c; 
+  border-radius: 10px; 
+} 
+  
+.scroll-box::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Color al pasar el mouse por encima */
+}
+
 @keyframes opacityDisplay {
     0% {
       opacity: 0;

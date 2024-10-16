@@ -18,16 +18,17 @@ const FollowsList = ({type, username}) => {
             if(type === "Following"){
                 const res = await UserService.getFollowingPage(token, username, page);
                 const newList = res._embedded.userDTOes || [];
-                setUsersList(prevList => [...prevList, ...newList]);
+                if(page > 0) setUsersList(prevList => [...prevList, ...newList]);
+                else setUsersList(newList)
                 setPage(prevPage => prevPage + 1);
-                setLoading(false)
             }else if(type === "Followers"){
                 const res = await UserService.getFollowersPage(token, username, page);
                 const newList = res._embedded.userDTOes || [];
-                setUsersList(prevList => [...prevList, ...newList]);
+                if(page > 0) setUsersList(prevList => [...prevList, ...newList]);
+                else setUsersList(newList)
                 setPage(prevPage => prevPage + 1);
-                setLoading(false)
             }
+            setLoading(false)
         }
     },[page, loading]);
 
@@ -53,30 +54,31 @@ const FollowsList = ({type, username}) => {
     return (
             <Box
                 padding={'2rem'}
-                width={'80%'}
-                height={'90%'}
+                width={'60%'}
+                height={'85%'}
                 zIndex={'10000'}
                 sx={{background: '#1d2b35 !important'}}
             >
                 <Typography typography={'p'} fontSize={'1.3rem'} color='#fff' fontWeight={'500'} marginBottom={'1.2rem'}>{type} list</Typography>
                 <Box
+                    className="scroll-box"
+                    height={'85%'}
                     display={'flex'}
                     flexDirection={'column'}
                     rowGap={'.4rem'}
                     overflow={'scroll'}
-                    height={'85%'}
-                    sx={{scrollbarWidth: '1px'}}
+                    sx={{overflowX: 'hidden'}}
                 >
                     {loading ? 
                         <Box textAlign={'center'} paddingTop={'4rem'}><Loading size={30}/></Box> 
                         : 
                         usersList.map(user => (
-                            <Box key={user.username} display={'flex'} alignItems={'center'} justifyContent={'space-between'} padding={'.5rem 1.1rem'} 
+                            <Box key={user.username} display={'flex'} alignItems={'center'} justifyContent={'space-between'} padding={'.5rem 1rem'} 
                                 sx={{
                                     cursor: 'pointer',
                                     transition: '.4s ',
                                     ":hover": {
-                                    background: '#21313d !important'
+                                        background: '#21313d !important'
                                     }
                                 }} 
                             >
@@ -87,7 +89,7 @@ const FollowsList = ({type, username}) => {
                                             borderRadius: '50%',
                                             backgroundColor: '#ccc'
                                         }}></Box>
-                                        <Box display={'flex'} flexDirection={'column'}>
+                                        <Box display={'flex'} flexDirection={'column'} rowGap={'.3rem'}>
                                             <Typography typography={'p'} color="#fff" fontSize={'.88rem'} lineHeight={'.6rem'}>{user.firstname} {user.lastname}</Typography>
                                             <Typography typography={'p'} color="rgba(255,255,255, .4)" fontSize={'.75rem'} fontWeight={'300'}>@{user.username}</Typography>
                                         </Box>
