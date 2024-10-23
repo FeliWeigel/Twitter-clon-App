@@ -49,9 +49,18 @@ public class UserService {
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new AuthenticationCredentialsNotFoundException("No authenticated user found");
         }
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        User user = userRepository.findByUsername(userDetails.getUsername())
+        Object principal = authentication.getPrincipal();
+
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else if (principal instanceof String) {
+            username = (String) principal;
+        } else {
+            throw new IllegalStateException("Unexpected principal type: " + principal.getClass());
+        }
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         return user.getId();

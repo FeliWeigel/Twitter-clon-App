@@ -181,8 +181,8 @@ public class AuthService {
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new AuthenticationCredentialsNotFoundException("No authenticated user found");
         }
+        System.out.println(authentication.getPrincipal());
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
         User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         List<Token> userTokens = tokenRepository.allValidTokensByUser(user.getId());

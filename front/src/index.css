@@ -94,6 +94,33 @@ a, input, button {
   z-index: 1000;
 }
 
+.vertical-nav {
+  width: 25%;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.vertical-nav-link {
+  color: rgba(255,255,255, .5);
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: flex-start;
+  column-gap: .6rem;
+  align-items: center;
+  font-weight: 500;
+  transition: .4s;
+}
+
+.vertical-nav-link:hover {
+  color: #fff;
+  transform: translateY(-.2rem);
+}
+
 .show-alert {
   opacity: 1 !important;
 }

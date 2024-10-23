@@ -4,7 +4,7 @@ import { FaTwitter } from "react-icons/fa";
 
 const Nav = () => {
   return (
-    <nav className="nav">
+    <Box component={'nav'} className="nav">
         <Box display={'flex'} columnGap={'1rem'} alignItems={'center'}>
             <a href="/home">
                 <FaTwitter size={24} color="#1a90d9"/>
@@ -18,7 +18,7 @@ const Nav = () => {
             }}/>
         </Box>
 
-    </nav>
+    </Box>
   )
 }
 

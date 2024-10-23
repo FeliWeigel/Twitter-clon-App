@@ -5,7 +5,6 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
 
 import Nav from "../nav/Nav"
-import WhoFollowCard from "../cards/WhoFollowCard"
 import PostCard from "../cards/PostCard"
 import TrendsCard from "../cards/TrendsCard"
 import portada from "../../assets/imgs/registerWall.png"
@@ -18,6 +17,7 @@ import FollowsList from "./FollowsList"
 
 import { Box, Typography } from "@mui/material"
 import { FaArrowLeft } from "react-icons/fa6";
+import VerticalNav from "../nav/VerticalNav"
 
 const UserProfilePage = () => {
    const userUsername = useParams('username').username
@@ -134,8 +134,8 @@ const UserProfilePage = () => {
             : null
          }
          <Box className="profile">
-            <Box position={"relative"} width={'25%'}>
-               <WhoFollowCard/>
+            <Box width={'25%'}>
+               <VerticalNav/>
             </Box>
             <Box 
                position={"relative"} 

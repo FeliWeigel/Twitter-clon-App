@@ -1,6 +1,6 @@
 .whofollow-card {
-    height: 155px;
-    max-height: 300px;
+    height: auto;
+    padding-bottom: .5rem;
 }
 
 
