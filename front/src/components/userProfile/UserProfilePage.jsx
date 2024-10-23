@@ -52,7 +52,6 @@ const UserProfilePage = () => {
       const fetchUserDetails = async () => {
          if(token){
             const res = await UserService.getAllUserDetails(token, userUsername);
-            console.log(res)
             if(res){
                setUserDetails(res.profile)
                setNumberOfFollowers(res.followers)

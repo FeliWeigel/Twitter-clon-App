@@ -8,11 +8,11 @@ import { MdOutlineBookmarks } from "react-icons/md";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import UserService from "../../services/UserService";
+import NewPostBtn from "../btn/NewPostBtn";
 
 const VerticalNav = () => {
   const handleLogout = () => {
-    const token = sessionStorage.getItem("acc_token")
-    UserService.logout(token);
+    UserService.logout();
   }
   return (
     <Box className="vertical-nav" component={'nav'}>
@@ -42,6 +42,7 @@ const VerticalNav = () => {
                 <MdOutlineBookmarks size={22}/>Bookmarks
               </Box>
             </Link>
+            <NewPostBtn prop={"np-btn-vnav"}/>
             <Box className="vertical-nav-link"
               onClick={handleLogout}
               component={'button'} 

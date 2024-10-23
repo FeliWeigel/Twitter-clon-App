@@ -17,8 +17,8 @@ const UserService = {
         const res = await axios.get(`${userProfileEndPoint}/${username}`, UserService.config(token));
         return res.data;
     },
-    logout: async (token) => {
-        const res = await axios.post(logoutEndPoint, UserService.config(token)).catch(err => {throw err});
+    logout: async () => {
+        const res = await axios.post(logoutEndPoint).catch(err => {throw err});
 
         return res.data;
     },

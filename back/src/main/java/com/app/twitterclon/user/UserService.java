@@ -1,6 +1,9 @@
 package com.app.twitterclon.user;
 
 import com.app.twitterclon.exception.CredentialsNotFoundException;
+import com.app.twitterclon.exception.FileUploadException;
+import com.app.twitterclon.exception.InvalidPostException;
+import com.app.twitterclon.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +14,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,6 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final S3Service s3Service;
 
     public UserDTO getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -168,6 +174,52 @@ public class UserService {
             throw new UsernameNotFoundException("User not found!");
         }
         return userRepository.countFollowing(userUsername);
+    }
+
+    public String uploadProfileImage(MultipartFile file){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDTO userAuthDTO = getAuthenticatedUser();
+        if (userAuthDTO == null || authentication == null || !authentication.isAuthenticated()) {
+            throw new AuthenticationCredentialsNotFoundException("No authenticated user found");
+        }
+
+        User user = userRepository.findByUsername(userAuthDTO.getUsername()).orElse(null);
+        String contentType = file.getContentType();
+        if (!isContentTypeSupported(contentType)) {
+            throw new InvalidPostException("Unsupported file type: " + contentType);
+        }
+
+       try {
+           String fileName = "users/" + userAuthDTO.getUsername() + "/profile_images/" + file.getOriginalFilename();
+           s3Service.uploadFile(fileName, file.getInputStream());
+           String imageURL = s3Service.generatePresignedUrl(fileName);
+           user.setProfileImageURL(imageURL);
+           userRepository.save(user);
+           return "Profile photo modified correctly!";
+       }catch (IOException e) {
+           throw new FileUploadException("Error uploading file", e);
+       }
+    }
+
+    public String editProfile(UserDTO userDTO){
+        UserDTO authUser = getAuthenticatedUser();
+        if(authUser == null){
+            throw new AuthenticationCredentialsNotFoundException("No authenticated user found");
+        }
+        User user = userRepository.findByUsername(authUser.getUsername()).orElse(null);
+
+        user.setFirstname(userDTO.getFirstname());
+        user.setLastname(userDTO.getLastname());
+        user.setDescription(userDTO.getDescription());
+        //
+        // logica envio de solicitud para cambio de email
+        //
+        userRepository.save(user);
+        return "Your profile has been successfully modified!";
+    }
+
+    private Boolean isContentTypeSupported(String contentType){
+        return contentType != null && (contentType.startsWith("image"));
     }
 
 }
