@@ -10,9 +10,9 @@ import WhoFollowCard from "../cards/WhoFollowCard.jsx"
 import NewPostCard from "../cards/NewPostCard.jsx"
 import TrendsCard from "../cards/TrendsCard.jsx"
 import Nav from "../nav/Nav"
-import PostCard from "../cards/PostCard.jsx"
 import PostService from "../../services/PostService.js"
 import Loading from "../../utils/Loading.jsx"
+import Feed from "../feed/Feed.jsx"
 
 const HomePage = () => {
   const [userProfile, setUserProfile] = useState(null);
@@ -143,11 +143,7 @@ const HomePage = () => {
                   <Typography typography={'p'}>There are {newPostLength} new posts! Click to load.</Typography>
               </Box> 
 
-              {feed.map((post) => {
-                return (
-                 <PostCard key={post.id} post={post}/>
-                )
-              })}
+              <Feed postList={feed}/>
 
               {loading && 
                 <Box className="loading-container">

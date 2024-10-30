@@ -1,5 +1,5 @@
 import axios from "axios"
-import { logoutEndPoint, userCountFollowersEndPoint, userCountFollowingEndPoint, userFollowersEndPoint, userFollowingEndPoint, userProfileEndPoint } from "../utils/ApiURLs"
+import { isFollowedUserEndPoint, isFollowerUserEndPoint, logoutEndPoint, userCountFollowersEndPoint, userCountFollowingEndPoint, userFollowEndPoint, userFollowersEndPoint, userFollowingEndPoint, userProfileEndPoint, userUnfollowEndPoint } from "../utils/ApiURLs"
 
 const UserService = {
     config: (token) => {
@@ -22,6 +22,14 @@ const UserService = {
 
         return res.data;
     },
+    followUser: async (token, username) => {
+        const res = await axios.post(`${userFollowEndPoint + username}`, null, UserService.config(token)).catch(err => {throw err})
+        return res.data
+    },
+    unfollowUser: async (token, username) => {
+        const res = await axios.post(`${userUnfollowEndPoint + username}`, null, UserService.config(token)).catch(err => {throw err})
+        return res.data
+    },
     countFollowers: async (token, username) => {
         const res = await axios.get(`${userCountFollowersEndPoint + username}`, UserService.config(token)).catch(err => {throw err})
         return res.data;
@@ -36,15 +44,25 @@ const UserService = {
     },
     getFollowersPage: async (token, username, page) => {
         const res = await axios.get(`${userFollowersEndPoint + username}?page=${page}`, UserService.config(token)).catch(err => {throw err})
-        console.log(res)
+        return res.data
+    },
+    isFollowed: async (token, username) => {
+        const res = await axios.get(`${isFollowedUserEndPoint + username}`, UserService.config(token)).catch(err => {throw err})
+        
+        return res.data
+    },
+    isFollower: async(token, username) => {
+        const res = await axios.get(`${isFollowerUserEndPoint + username}`,  UserService.config(token)).catch(err => {throw err})
         return res.data
     },
     getAllUserDetails: async (token, username) => {
         const userProfile = await UserService.getUserProfile(token, username);
+        const authUserProfile = await UserService.getAuthUserProfile(token);
         const numberOfFollowers = await UserService.countFollowers(token, username);
         const numberOfFollowing = await UserService.countFollowing(token, username);
         let res = {
             profile: userProfile,
+            authUser: authUserProfile,
             followers: numberOfFollowers,
             following: numberOfFollowing
         }

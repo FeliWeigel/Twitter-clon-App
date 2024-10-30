@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Box, Typography } from "@mui/material"
 import "../../index.css"
-import FollowBtn from "../btn/FollowBtn"
+import FollowUnfollowBtn from "../btn/FollowUnfollowBtn"
 
 const UserCard = ({user}) => {
     return (
@@ -27,7 +27,7 @@ const UserCard = ({user}) => {
                     </Box>
                 </Box>
                 
-                <FollowBtn/>
+                <FollowUnfollowBtn username={user.username}/>
         </Box>
     )
 }

@@ -26,13 +26,13 @@ public class UserController {
         return ResponseEntity.ok(userService.getProfileUser(username));
     }
 
-    @PostMapping("/follow/{followingUsername}")
-    public ResponseEntity<String> followUser(@PathVariable String followingUsername){
-        return ResponseEntity.ok(userService.followUser(followingUsername));
+    @PostMapping("/follow/{username}")
+    public ResponseEntity<String> followUser(@PathVariable String username){
+        return ResponseEntity.ok(userService.followUser(username));
     }
-    @PostMapping("/unfollow/{followingUsername}")
-    public ResponseEntity<String> unfollowUser(@PathVariable String followingUsername){
-        return ResponseEntity.ok(userService.unfollowUser(followingUsername));
+    @PostMapping("/unfollow/{username}")
+    public ResponseEntity<String> unfollowUser(@PathVariable String username){
+        return ResponseEntity.ok(userService.unfollowUser(username));
     }
 
     @GetMapping("/followers/{userUsername}")
@@ -63,5 +63,13 @@ public class UserController {
     @GetMapping("/countfollowing/{userUsername}")
     public ResponseEntity<Long> numberOfFollowing(@PathVariable String userUsername){
         return ResponseEntity.ok(userService.numberOfFollowing(userUsername));
+    }
+    @GetMapping("/isfollowed/{userUsername}")
+    public ResponseEntity<Boolean> isFollowedUser(@PathVariable String userUsername){
+        return ResponseEntity.ok(userService.isFollowed(userUsername));
+    }
+    @GetMapping("/isfollower/{userUsername}")
+    public ResponseEntity<Boolean> isFollowerUser(@PathVariable String userUsername){
+        return ResponseEntity.ok(userService.isFollower(userUsername));
     }
 }

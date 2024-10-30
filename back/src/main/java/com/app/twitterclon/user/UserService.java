@@ -4,6 +4,7 @@ import com.app.twitterclon.exception.CredentialsNotFoundException;
 import com.app.twitterclon.exception.FileUploadException;
 import com.app.twitterclon.exception.InvalidPostException;
 import com.app.twitterclon.s3.S3Service;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -99,27 +100,39 @@ public class UserService {
     public Optional<User> getUserByUsername(String username){
         return userRepository.findByUsername(username);
     }
-    public String followUser(String followingUsername){
+    @Transactional
+    public String followUser(String username){
         Long followerId = getAuthenticatedUserId();
         User follower = userRepository.findById(followerId).orElseThrow(() -> new CredentialsNotFoundException("An unexpected error has occurred, please try again later"));
-        User following = userRepository.findByUsername(followingUsername).orElseThrow(() -> new CredentialsNotFoundException("An unexpected error has occurred, please try again later"));
+        User following = userRepository.findByUsername(username).orElseThrow(() -> new CredentialsNotFoundException("An unexpected error has occurred, please try again later"));
 
-        follower.getFollowing().add(following);
-        following.getFollowers().add(follower);
-        userRepository.save(follower);
-        return "Have you started following @" + following.getUsername();
+        if(!follower.getFollowing().contains(following)){
+            follower.getFollowing().add(following);
+            following.getFollowers().add(follower);
+            userRepository.save(follower);
+            userRepository.save(following);
+        } else {
+            throw new IllegalArgumentException("You are already following @" + username + "!");
+        }
+        return "Have you started following @" + following.getUsername() + "!";
     }
 
-    public String unfollowUser(String followingUsername){
+    @Transactional
+    public String unfollowUser(String username){
         Long followerId = getAuthenticatedUserId();
         User follower = userRepository.findById(followerId).orElseThrow(() -> new CredentialsNotFoundException("An unexpected error has occurred, please try again later"));
-        User following = userRepository.findByUsername(followingUsername).orElseThrow(() -> new CredentialsNotFoundException("An unexpected error has occurred, please try again later"));
+        User following = userRepository.findByUsername(username).orElseThrow(() -> new CredentialsNotFoundException("An unexpected error has occurred, please try again later"));
 
-        follower.getFollowing().remove(following);
-        following.getFollowers().remove(follower);
-        userRepository.save(follower);
 
-        return "Have you stopped following @" + following.getUsername();
+        if(follower.getFollowing().contains(following)){
+            follower.getFollowing().remove(following);
+            following.getFollowers().remove(follower);
+            userRepository.save(follower);
+            userRepository.save(following);
+        } else {
+            throw new IllegalArgumentException("You still don't follow  @" + username + "!");
+        }
+        return "Have you stopped following @" + following.getUsername() + "!";
     }
 
     public PagedModel<UserDTO> followersList(String userUsername, Pageable pageable){
@@ -161,6 +174,25 @@ public class UserService {
         ));
 
     }
+
+    public Boolean isFollowed(String followedUsername){
+        UserDTO userAuth = getAuthenticatedUser();
+        User userFollowed = userRepository.findByUsername(followedUsername).orElse(null);
+        if(userAuth == null || userFollowed == null){
+            throw new UsernameNotFoundException("User not found.");
+        }
+        return userRepository.allUserFollowing(userAuth.getUsername()).contains(userFollowed);
+    }
+
+    public Boolean isFollower(String followerUsername){
+        UserDTO userAuth = getAuthenticatedUser();
+        User userFollower = userRepository.findByUsername(followerUsername).orElse(null);
+        if(userAuth == null || userFollower == null){
+            throw new UsernameNotFoundException("User not found.");
+        }
+        return userRepository.allUserFollowers(userAuth.getUsername()).contains(userFollower);
+    }
+
     public Long numberOfFollowers(String userUsername){
         User user = userRepository.findByUsername(userUsername).orElse(null);
         if(user == null){

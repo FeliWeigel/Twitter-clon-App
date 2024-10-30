@@ -1,28 +1,34 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import "../../index.css"
 import "../../css/userProfile.css"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
 
 import Nav from "../nav/Nav"
-import PostCard from "../cards/PostCard"
 import TrendsCard from "../cards/TrendsCard"
 import portada from "../../assets/imgs/registerWall.png"
 import UserService from "../../services/UserService"
 import Loading from "../../utils/Loading"
-import FollowBtn from "../btn/FollowBtn"
-import FollowingBtn from "../btn/FollowingBtn"
 import PostService from "../../services/PostService"
 import FollowsList from "./FollowsList"
 
 import { Box, Typography } from "@mui/material"
 import { FaArrowLeft } from "react-icons/fa6";
 import VerticalNav from "../nav/VerticalNav"
+import EditProfilePopUp from "./EditProfilePopUp"
+import Feed from "../feed/Feed"
+import IsFollowerCard from "../cards/IsFollowerCard"
+import FollowUnfollowBtn from "../btn/FollowUnfollowBtn"
 
 const UserProfilePage = () => {
-   const userUsername = useParams('username').username
-   const [userDetails, setUserDetails] = useState(null);
-   const [userFeed, setUserFeed] = useState([]);
+   const [editMode, setEditMode] = useState(false)
+
+   const [authUser, setAuthUser] = useState(null)
+   const { username: userUsername } = useParams()
+   const [isFollower, setIsFollower] = useState(false)
+   const [userDetails, setUserDetails] = useState(null)
+   const [userFeed, setUserFeed] = useState([])
    const [numberOfFollowers, setNumberOfFollowers] = useState(0)
    const [numberOfFollowing, setNumberOfFollowing] = useState(0)
 
@@ -45,35 +51,43 @@ const UserProfilePage = () => {
          setPage(prevPage => prevPage + 1); 
          setLoading(false);
       }
-   }, [page, loading]);
+   }, [page, userDetails]);
+
+   const fetchUserDetails = async (token) => {
+      try {
+         const res = await UserService.getAllUserDetails(token, userUsername);
+         if (res) {
+            setUserDetails(res.profile);
+            setAuthUser(res.authUser);
+            setNumberOfFollowers(res.followers);
+            setNumberOfFollowing(res.following);
+            const isFollower = await UserService.isFollower(token, userUsername);
+            if(isFollower != null){
+               setIsFollower(isFollower);
+            }
+
+         }
+      } catch (error) {
+         console.error("Error fetching user details:", error);
+      } finally {
+         setLoading(false);
+      }
+   }
    
    useEffect(() => {
       const token = sessionStorage.getItem("acc_token")
-      const fetchUserDetails = async () => {
-         if(token){
-            const res = await UserService.getAllUserDetails(token, userUsername);
-            if(res){
-               setUserDetails(res.profile)
-               setNumberOfFollowers(res.followers)
-               setNumberOfFollowing(res.following)
-               setLoading(false)
-            }
-         }else {
-            setLoading(true)
-         }
+      if(token){
+         fetchUserDetails(token);
+      }else {
+         setLoading(true);
       }
-      fetchUserDetails();
    },[])
 
    useEffect(() => {
-      const initializeFeed = async () => {
-         await fetchNewPage();
-      }
-
       if(userDetails){
-         initializeFeed()
+         fetchNewPage()
       }
-   }, [userDetails])
+   }, [])
 
    useEffect( () => {
       const observer = new IntersectionObserver(entries => {
@@ -88,85 +102,98 @@ const UserProfilePage = () => {
       return () => {
         if (target) observer.unobserve(target);
       };
-    }, [loading, fetchNewPage]);
+   }, [loading, fetchNewPage]);
 
    return (
       <Box className="container p-container" 
          sx={{
             backgroundColor: '#05131C'
       }}> 
-         <Nav/>
-         {
-            showFollowing || showFollowers ? 
-            <Box
-               width={'100%'}
-               height={'100vh'}
-               position={'fixed'}
-               display={'flex'}
-               justifyContent={'center'}
-               alignItems={'center'}
-               zIndex={'10000'}
-               top={0}
-               right={0}
-               sx={{backgroundColor: 'rgba(0,0,0, .4)'}}
-            >
-               <Box 
-                  component={'button'}
-                  position={'absolute'}
-                  top={'2rem'}
-                  left={'5rem'}
-                  onClick={() => {
-                     setShowFollowers(false)
-                     setShowFollowing(false)
-                  }}
-               >
-                  <FaArrowLeft size={25} color="#fff"/>
-               </Box>
+         {loading ? 
+            <Box width={'100%'} height={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+               <Loading size={35}/>
+            </Box>
+             :
+            <Box>
+               <Nav/>
                {
-                  showFollowing ? 
-                     <FollowsList type={"Following"} username={userUsername}/> 
-                  : showFollowers ? 
-                     <FollowsList type={"Followers"} username={userUsername}/> 
+                  showFollowing || showFollowers || editMode ? 
+                  <Box
+                     width={'100%'}
+                     height={'100vh'}
+                     position={'fixed'}
+                     display={'flex'}
+                     justifyContent={'center'}
+                     alignItems={'center'}
+                     zIndex={'10000'}
+                     top={0}
+                     right={0}
+                     sx={{backgroundColor: 'rgba(0,0,0, .4)'}}
+                  >
+                     <Box 
+                        component={'button'}
+                        position={'absolute'}
+                        top={'2rem'}
+                        left={'5rem'}
+                        onClick={() => {
+                           setShowFollowers(false)
+                           setShowFollowing(false)
+                           setEditMode(false)
+                        }}
+                     >
+                        <FaArrowLeft size={25} color="#fff"/>
+                     </Box>
+                     {
+                        showFollowing && !editMode ? 
+                           <FollowsList type={"Following"} username={userUsername}/> 
+                        : showFollowers &&  !editMode ?
+                           <FollowsList type={"Followers"} username={userUsername}/> 
+                        : editMode && !showFollowers && !showFollowing ?
+                           <EditProfilePopUp userDetails={userDetails}/>
+                        : null
+                     }
+                  </Box>
                   : null
                }
-            </Box>
-            : null
-         }
-         <Box className="profile">
-            <Box width={'25%'}>
-               <VerticalNav/>
-            </Box>
-            <Box 
-               position={"relative"} 
-               display={'flex'} 
-               flexDirection={'column'}
-               rowGap={'1.5rem'}
-               width={'50%'}
-               padding={'1rem'}
-               borderLeft={'1px solid rgba(255,255,255,.1)'}
-               borderRight={'1px solid rgba(255,255,255,.1)'}
-            >
-               {loading ? 
-                  <Box width={'100%'} height={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-                     <Loading size={35}/>
+               <Box className="profile">
+                  <Box width={'25%'}>
+                     <VerticalNav/>
                   </Box>
-                  : 
-                  <Box className="user-profile-data">
-                     <Box className="portada">
-                        <img className="portada-img" src={portada}/>
-                        <Box sx={{
-                           width: '110px',
-                           height: '110px',
-                           borderRadius: '50%',
-                           backgroundColor: '#ccc',
-                           position: 'absolute',
-                           left: '2.5rem',
-                           bottom: '-2rem'
-                        }}></Box>
-                     </Box>
-                     <Box className="profile-info">
+                  <Box 
+                     position={"relative"} 
+                     display={'flex'} 
+                     flexDirection={'column'}
+                     rowGap={'1.5rem'}
+                     width={'50%'}
+                     padding={'1rem'}
+                     borderLeft={'1px solid rgba(255,255,255,.1)'}
+                     borderRight={'1px solid rgba(255,255,255,.1)'}
+                  >
+   
+                     <Box className="user-profile-data">
+                        <Box className="portada">
+                           <img className="portada-img" src={portada}/>
+                           <Box sx={{
+                              width: '110px',
+                              height: '110px',
+                              borderRadius: '50%',
+                              backgroundColor: '#ccc',
+                              position: 'absolute',
+                              left: '2.5rem',
+                              bottom: '-2rem'
+                           }}></Box>
+                        </Box>
+                        <Box className="profile-info">
                            <Typography typography={'p'} fontSize={'1.4rem'} fontWeight={'500'} color="#fff">{userDetails.firstname} {userDetails.lastname}</Typography>
-                           <Typography typography={'p'} color="rgba(255,255,255, .4)" marginBottom={'.2rem'}>@{userDetails.username}</Typography>
+                           
+                           <Box display={'flex'} columnGap={'.5rem'} alignItems={'center'}>
+                              <Typography typography={'p'} color="rgba(255,255,255, .4)" marginBottom={'.2rem'}>@{userDetails.username}</Typography>
+                              { 
+                                 isFollower ? 
+                                 <IsFollowerCard/> 
+                                 : null 
+                              }
+                           </Box>
                            <Typography typography={'p'} color="rgba(255,255,255, .55)" marginBottom={'.5rem'}>Joined in {userDetails.uploadDate}.</Typography>
                            <Typography typography={'p'} color="#fff" marginBottom={'1rem'}>{userDetails.description}</Typography>
                            <Box 
@@ -192,7 +219,7 @@ const UserProfilePage = () => {
                                     {numberOfFollowing}
                                  </Typography>
                               </Box>
-
+   
                               <Box
                                  width={'1px'}
                                  height={'25px'}
@@ -218,11 +245,24 @@ const UserProfilePage = () => {
                                  </Typography>
                               </Box>
                            </Box>
-                           
-                           <Box component={'button'} className="profile-btn edit-profile-btn">Edit Profile</Box>
-                           {userDetails === "a" ? <FollowBtn prop={'profile-btn'}/> : null}
-                           {userDetails === "a" ? <FollowingBtn prop={'profile-btn'}/> : null}
 
+                           {
+                              userDetails.username === authUser.username ? 
+                                 <Box 
+                                    component={'button'} 
+                                    className="profile-btn edit-profile-btn"
+                                    onClick={() => {
+                                       if(!editMode) setEditMode(true); 
+                                          else setEditMode(false)
+                                    }}
+                                 >
+                                    Edit Profile
+                                 </Box>
+                              : userDetails.username != authUser.username ?
+                              <FollowUnfollowBtn prop={'profile-btn'} username={userDetails.username}/>
+                        : null
+                           }
+                           
                            <Box
                               display={'flex'}
                               alignItems={'center'}
@@ -241,28 +281,21 @@ const UserProfilePage = () => {
                                     {section}
                                  </Box>
                               ))}
-                           </Box>
-                           
+                           </Box>     
+                        </Box>
                      </Box>
+
+                     <Feed postList={userFeed}/>
+
+                     <Box ref={scrollTargetRef}></Box>
                   </Box>
-               
-               }
-               
-               {
-                  loading ? null 
-                     : 
-                  userFeed.map((post) => (
-                     <PostCard key={`${post.date}`} post={post}/>
-                  ))
-               }
-
-               <Box ref={scrollTargetRef}></Box>
-
+                  <Box position={"relative"} width={'25%'}>
+                     <TrendsCard propClass={'p-trends-card'}/>
+                  </Box>
+               </Box>
             </Box>
-            <Box position={"relative"} width={'25%'}>
-               <TrendsCard propClass={'p-trends-card'}/>
-            </Box>
-         </Box>
+         }
+         
       </Box>
    )
 }

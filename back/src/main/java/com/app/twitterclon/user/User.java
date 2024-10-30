@@ -13,7 +13,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +31,7 @@ public class User implements UserDetails {
     private String lastname;
     private String username;
     private String description;
+    private String link;
     private String email;
     private Date birthdate;
     private String uploadDate;

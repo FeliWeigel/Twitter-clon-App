@@ -11,6 +11,8 @@ export const userFollowersEndPoint = `${ApiURL}/user/followers/`
 export const userFollowingEndPoint = `${ApiURL}/user/following/`
 export const userCountFollowersEndPoint = `${ApiURL}/user/countfollowers/`
 export const userCountFollowingEndPoint = `${ApiURL}/user/countfollowing/`
+export const isFollowedUserEndPoint = `${ApiURL}/user/isfollowed/`
+export const isFollowerUserEndPoint = `${ApiURL}/user/isfollower/`
 
 export const getFeedEndPoint = `${ApiURL}/post/feed`
 export const getNewPostsEndPoint = `${ApiURL}/post/feed/new`
