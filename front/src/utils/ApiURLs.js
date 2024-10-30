@@ -5,6 +5,7 @@ export const loginEndPoint = `${ApiURL}/auth/login`
 export const logoutEndPoint = `${ApiURL}/auth/logout`
 
 export const userProfileEndPoint = `${ApiURL}/user/profile`
+export const userEditProfileEndPoint = `${ApiURL}/user/profile/edit`
 export const userFollowEndPoint = `${ApiURL}/user/follow/`
 export const userUnfollowEndPoint = `${ApiURL}/user/unfollow/`
 export const userFollowersEndPoint = `${ApiURL}/user/followers/`

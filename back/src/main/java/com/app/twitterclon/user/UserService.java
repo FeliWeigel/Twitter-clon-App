@@ -3,6 +3,7 @@ package com.app.twitterclon.user;
 import com.app.twitterclon.exception.CredentialsNotFoundException;
 import com.app.twitterclon.exception.FileUploadException;
 import com.app.twitterclon.exception.InvalidPostException;
+import com.app.twitterclon.exception.NullFieldsException;
 import com.app.twitterclon.s3.S3Service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -90,6 +91,7 @@ public class UserService {
                 .email(user.getEmail())
                 .uploadDate(user.getUploadDate())
                 .description(user.getDescription())
+                .link(user.getLink())
                 .build();
         return userDTO;
     }
@@ -240,12 +242,13 @@ public class UserService {
         }
         User user = userRepository.findByUsername(authUser.getUsername()).orElse(null);
 
+        if(userDTO.getFirstname() == null || userDTO.getLastname() == null){
+            throw new NullFieldsException("Warning! Fields firstname and lastname cannot be null.");
+        }
         user.setFirstname(userDTO.getFirstname());
         user.setLastname(userDTO.getLastname());
         user.setDescription(userDTO.getDescription());
-        //
-        // logica envio de solicitud para cambio de email
-        //
+        user.setLink(userDTO.getLink());
         userRepository.save(user);
         return "Your profile has been successfully modified!";
     }

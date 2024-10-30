@@ -7,6 +7,11 @@ import { useParams } from "react-router-dom"
 
 import Nav from "../nav/Nav"
 import TrendsCard from "../cards/TrendsCard"
+import VerticalNav from "../nav/VerticalNav"
+import EditProfilePopUp from "./EditProfilePopUp"
+import Feed from "../feed/Feed"
+import IsFollowerCard from "../cards/IsFollowerCard"
+import FollowUnfollowBtn from "../btn/FollowUnfollowBtn"
 import portada from "../../assets/imgs/registerWall.png"
 import UserService from "../../services/UserService"
 import Loading from "../../utils/Loading"
@@ -15,11 +20,8 @@ import FollowsList from "./FollowsList"
 
 import { Box, Typography } from "@mui/material"
 import { FaArrowLeft } from "react-icons/fa6";
-import VerticalNav from "../nav/VerticalNav"
-import EditProfilePopUp from "./EditProfilePopUp"
-import Feed from "../feed/Feed"
-import IsFollowerCard from "../cards/IsFollowerCard"
-import FollowUnfollowBtn from "../btn/FollowUnfollowBtn"
+import { FaRegCalendarAlt } from "react-icons/fa";
+import { FaLink } from "react-icons/fa6";
 
 const UserProfilePage = () => {
    const [editMode, setEditMode] = useState(false)
@@ -81,7 +83,7 @@ const UserProfilePage = () => {
       }else {
          setLoading(true);
       }
-   },[])
+   },[editMode])
 
    useEffect(() => {
       if(userDetails){
@@ -103,7 +105,7 @@ const UserProfilePage = () => {
         if (target) observer.unobserve(target);
       };
    }, [loading, fetchNewPage]);
-
+   console.log(userDetails)
    return (
       <Box className="container p-container" 
          sx={{
@@ -194,7 +196,14 @@ const UserProfilePage = () => {
                                  : null 
                               }
                            </Box>
-                           <Typography typography={'p'} color="rgba(255,255,255, .55)" marginBottom={'.5rem'}>Joined in {userDetails.uploadDate}.</Typography>
+                           <Typography typography={'p'} color="rgba(255,255,255, .55)" fontSize={'.9rem'} marginBottom={'.2rem'} display={'flex'} alignItems={'center'} gap={'.3rem'}>
+                              <FaRegCalendarAlt size={13}/>
+                              Joined in {userDetails.uploadDate}.
+                           </Typography>
+                           <Box component={'a'} target="_blank" href={userDetails.link}  color="rgba(85, 85,255)" fontSize={'.9rem'} marginBottom={'.5rem'} display={'flex'} alignItems={'center'} gap={'.3rem'}>
+                              <FaLink size={14} color="rgba(255,255,255, .55)"/>
+                              {userDetails.link}
+                           </Box>
                            <Typography typography={'p'} color="#fff" marginBottom={'1rem'}>{userDetails.description}</Typography>
                            <Box 
                               display={'flex'}

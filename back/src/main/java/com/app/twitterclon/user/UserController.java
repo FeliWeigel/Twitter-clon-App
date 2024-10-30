@@ -22,8 +22,13 @@ public class UserController {
         return ResponseEntity.ok(userService.getAuthenticatedUser());
     }
     @GetMapping("/profile/{username}")
-    public ResponseEntity<UserDTO> getProfileUser(@PathVariable String username){
+    public ResponseEntity<UserDTO> getUserProfile(@PathVariable String username){
         return ResponseEntity.ok(userService.getProfileUser(username));
+    }
+
+    @PostMapping("/profile/edit")
+    public ResponseEntity<String> editUserProfile(@RequestBody UserDTO user){
+        return ResponseEntity.ok(userService.editProfile(user));
     }
 
     @PostMapping("/follow/{username}")

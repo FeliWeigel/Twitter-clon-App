@@ -1,5 +1,5 @@
 import axios from "axios"
-import { isFollowedUserEndPoint, isFollowerUserEndPoint, logoutEndPoint, userCountFollowersEndPoint, userCountFollowingEndPoint, userFollowEndPoint, userFollowersEndPoint, userFollowingEndPoint, userProfileEndPoint, userUnfollowEndPoint } from "../utils/ApiURLs"
+import { isFollowedUserEndPoint, isFollowerUserEndPoint, logoutEndPoint, userCountFollowersEndPoint, userCountFollowingEndPoint, userEditProfileEndPoint, userFollowEndPoint, userFollowersEndPoint, userFollowingEndPoint, userProfileEndPoint, userUnfollowEndPoint } from "../utils/ApiURLs"
 
 const UserService = {
     config: (token) => {
@@ -22,6 +22,10 @@ const UserService = {
 
         return res.data;
     },
+    editProfileInfo: async (token, userDTO) => {
+        const res = await axios.post(userEditProfileEndPoint, userDTO, UserService.config(token)).catch(err => {throw err});
+        return res
+    }, 
     followUser: async (token, username) => {
         const res = await axios.post(`${userFollowEndPoint + username}`, null, UserService.config(token)).catch(err => {throw err})
         return res.data

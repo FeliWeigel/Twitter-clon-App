@@ -22,4 +22,5 @@ public class UserDTO {
     private String uploadDate;
     private String password;
     private String description;
+    private String link;
 }
