@@ -32,7 +32,7 @@ const ProfileCard = ({user, propClass}) => {
             flexDirection={'column'} 
             alignItems={'center'}
         >
-        <Typography typography={'p'} textAlign={'center'} color="#fff" fontSize={'1.07rem'}>{user.firstname}</Typography>
+        <Typography typography={'p'} textAlign={'center'} color="#fff" fontSize={'1.07rem'}>{user.profile.firstname}</Typography>
         <Typography 
             typography={'p'} 
             fontSize={'.85rem'} 
@@ -41,7 +41,7 @@ const ProfileCard = ({user, propClass}) => {
             fontWeight={'300'}
             marginBottom={'.3rem'}
         >
-            @{user.username}
+            @{user.profile.username}
         </Typography>
         <Typography 
             typography={'p'} 
@@ -52,7 +52,9 @@ const ProfileCard = ({user, propClass}) => {
             fontWeight={'400'}
             lineHeight={'1rem'}
         >
-            {user.description}
+            {
+                user.profile.description.length > 75 ? `${user.description.substring(0, 75)}...` : user.profile.description
+            }
         </Typography>
         </Box>
 
@@ -67,29 +69,31 @@ const ProfileCard = ({user, propClass}) => {
             borderBottom: '1px solid rgba(255,255,255, .1)',
             columnGap: '1.2rem'
         }}>
-            <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
-                <Typography typography={'p'} color="#fff" fontSize={'1rem'}>
-                    1.923
-                </Typography>
-                <Typography typography={'p'} color="rgba(255,255,255, .55)" fontSize={'.8rem'} fontWeight={'300'}>
-                    Following
-                </Typography>
-            </Box>
-
+            <Link  to={`/user/profile/${user.profile.username}`}>
+                <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
+                    <Typography typography={'p'} color="#fff" fontSize={'1rem'}>
+                        {user.following}
+                    </Typography>
+                    <Typography typography={'p'} color="rgba(255,255,255, .55)" fontSize={'.8rem'} fontWeight={'300'}>
+                        Following
+                    </Typography>
+                </Box>
+            </Link>
             <Box height={'2.7rem'} width={'1px'} sx={{background: 'rgba(255,255,255, .2)'}}></Box>
-            
-            <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
-                <Typography typography={'p'} color="#fff" fontSize={'1rem'}>
-                    7.486
-                </Typography>
-                <Typography typography={'p'} color="rgba(255,255,255, .55)" fontSize={'.8rem'} fontWeight={'300'}>
-                    Followers
-                </Typography>
-            </Box>
+            <Link  to={`/user/profile/${user.profile.username}`}>
+                <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
+                    <Typography typography={'p'} color="#fff" fontSize={'1rem'}>
+                        {user.followers}    
+                    </Typography>
+                    <Typography typography={'p'} color="rgba(255,255,255, .55)" fontSize={'.8rem'} fontWeight={'300'}>
+                        Followers
+                    </Typography>
+                </Box>
+            </Link>
         </Box>
 
         <Box display={'flex'} justifyContent={'center'} alignItems={'center'} padding={'1.1rem'} >
-            <Link className="h-profile-link" to={`/user/profile/${user.username}`}>My profile</Link>
+            <Link className="h-profile-link" to={`/user/profile/${user.profile.username}`}>My profile</Link>
         </Box>
     </Card>
   )

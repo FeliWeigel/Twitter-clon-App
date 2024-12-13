@@ -11,6 +11,7 @@ import { FaRetweet } from "react-icons/fa6";
 import { FaCommentDots } from "react-icons/fa";
 import { IoStatsChart } from "react-icons/io5";
 import { BsBookmarkPlusFill } from "react-icons/bs";
+import VideoPreview from "../post/VideoPreview";
 
 const PostCard = ({post, propClass}) => {
     const [postDate, setPostDate] = useState(post.date)
@@ -50,7 +51,7 @@ const PostCard = ({post, propClass}) => {
                             post.imageId != null ? 
                                 <img className="post-file" key={post.imageId} src={post.fileUrl} alt="post photo"/> 
                             : post.videoId != null ? 
-                                <video className="post-file" key={post.videoId} src={post.fileUrl} autoPlay alt="post video"/> 
+                                <VideoPreview videoKey={post.videoId} URL={post.fileUrl}/>
                             : null
                         }
                     </Box>

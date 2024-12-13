@@ -157,6 +157,14 @@ a, input, button {
   background-color: #555; /* Color al pasar el mouse por encima */
 }
 
+.video-play-icon {
+  position: absolute;
+  cursor: pointer;
+  color: #fff;
+  top: 50%;
+  right: 50%;
+} 
+
 @keyframes opacityDisplay {
     0% {
       opacity: 0;

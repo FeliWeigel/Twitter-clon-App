@@ -32,8 +32,13 @@ const HomePage = () => {
     const token = sessionStorage.getItem("acc_token");
     
     if (!userProfile) {
-      const profile = await UserService.getAuthUserProfile(token);
-      setUserProfile(profile);
+      const authUser = await UserService.getAuthUserProfile(token);
+      if(authUser){
+        const userDetails = await UserService.getAllUserDetails(token, authUser.username);
+        setUserProfile(userDetails);
+      }
+
+      return;
     }
 
     // Cargar la primera página de posts

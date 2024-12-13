@@ -200,10 +200,14 @@ const UserProfilePage = () => {
                               <FaRegCalendarAlt size={13}/>
                               Joined in {userDetails.uploadDate}.
                            </Typography>
-                           <Box component={'a'} target="_blank" href={userDetails.link}  color="rgba(85, 85,255)" fontSize={'.9rem'} marginBottom={'.5rem'} display={'flex'} alignItems={'center'} gap={'.3rem'}>
-                              <FaLink size={14} color="rgba(255,255,255, .55)"/>
-                              {userDetails.link}
-                           </Box>
+                           {
+                              userDetails.link ? 
+                                 <Box component={'a'} target="_blank" href={userDetails.link}  color="rgba(85, 85,255)" fontSize={'.9rem'} marginBottom={'.5rem'} display={'flex'} alignItems={'center'} gap={'.3rem'}>
+                                    <FaLink size={14} color="rgba(255,255,255, .55)"/>
+                                    {userDetails.link}
+                                 </Box>
+                              : null
+                           }
                            <Typography typography={'p'} color="#fff" marginBottom={'1rem'}>{userDetails.description}</Typography>
                            <Box 
                               display={'flex'}

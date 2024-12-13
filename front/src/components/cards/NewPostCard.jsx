@@ -4,7 +4,7 @@ import "../../index.css";
 import "../../css/newPostCard.css";
 import PostService from "../../services/PostService.js";
 
-import { Alert, Box, Card } from "@mui/material";
+import { Alert, Box, Card, Typography } from "@mui/material";
 import { TbPhotoFilled } from "react-icons/tb";
 import { FaVideo } from "react-icons/fa";
 import { IoCalendar } from "react-icons/io5";
@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from "react";
 
 const NewPostCard = ({propClass}) => {
     const [text, setText] = useState("");
+    const [textSize, setTextSize] = useState(0);
     const [file, setFile] = useState(null);
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -47,6 +48,7 @@ const NewPostCard = ({propClass}) => {
 
     const handleTextChange = (e) => {
         setText(e.target.value);
+        setTextSize(e.target.value.length)
     }
 
     const handleFileChange = (e) => {
@@ -90,6 +92,7 @@ const NewPostCard = ({propClass}) => {
             clearForm.clearFile()
             setPhotoPreviewURL(null);
             setVideoPreviewURL(null);
+            setTextSize(0)
         })
         .catch(() =>{
             setError(true);
@@ -134,16 +137,21 @@ const NewPostCard = ({propClass}) => {
                             borderRadius: '50%',
                             backgroundColor: '#ccc'
                         }}></Box>
-                        <Box component={'input'} type="text" ref={textInputRef} onChange={handleTextChange} placeholder="What's happening?!"  maxLength={250} color={'#fff'} 
-                            sx={{
-                            background: '#2a3a45',
-                            padding: '.8rem 1rem',
-                            width: '100%',
-                            borderRadius: '7px',
-                            "::placeholder": {
-                                color: 'rgba(255,255,255, .7)'
-                            }
-                            }}>
+                        <Box position={'relative'} width={'100%'}>
+                            <Box component={'input'} type="text" ref={textInputRef} onChange={handleTextChange} placeholder="What's happening?!"  maxLength={200} color={'#fff'} 
+                                sx={{
+                                background: '#2a3a45',
+                                padding: '.8rem 4.5rem .8rem 1rem',
+                                width: '100%',
+                                borderRadius: '7px',
+                                "::placeholder": {
+                                    color: 'rgba(255,255,255, .7)'
+                                }
+                                }}>
+                            </Box>
+                            <Typography typography={'p'} fontSize={'.9rem'} position={'absolute'} bottom={'.55rem'} fontWeight={'300'} right={'.5rem'} color="rgba(255,255,255, .5)">
+                                {textSize}/200
+                            </Typography>
                         </Box>
                         <Box component={'input'} type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
     
