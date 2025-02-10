@@ -13,11 +13,28 @@
     border: none;
     outline: none;
     text-decoration: none;
+    font-size: .9rem;
     transition: .4s;
 }
 
 .auth-link:hover {
     color: #1a90d9;
+}
+
+.oauth-link {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    padding: 8px 15px;
+    border: 1.5px solid #065b9094;
+    box-shadow: 0px 0px 3px 0px #1a90d970;
+    border-radius: 10px;
+    transition: .4s;
+}
+
+.oauth-link:hover {
+    box-shadow: 0px 0px 5px 0px #1a90d99a;
 }
 
 .auth-icon {

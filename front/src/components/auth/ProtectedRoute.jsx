@@ -7,6 +7,8 @@ import Loading from '../../utils/Loading';
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
   const { loading } = useAuth();
+
+  console.log(isAuthenticated)
   
   if (loading) {
     return (

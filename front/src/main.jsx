@@ -9,6 +9,7 @@ import RegisterPage from './components/auth/RegisterPage.jsx'
 import LogInPage from './components/auth/LogInPage.jsx'
 import { AuthProvider } from './components/auth/AuthProvider.jsx'
 import UserProfilePage from './components/userProfile/UserProfilePage.jsx'
+import OAuthRedirectPage from './components/auth/OAuthRedirectPage.jsx'
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: '/auth/register',
     element: <RegisterPage />,
+  },
+  {
+    path: '/auth/redirect',
+    element: <OAuthRedirectPage />,
   },
   {
     path: '/home',

@@ -10,6 +10,8 @@ import { useState } from "react"
 import { loginEndPoint } from "../../utils/ApiURLs"
 import axios from "axios"
 import { useAuth } from "./AuthProvider"
+import GoogleOAuthBtn from "../btn/GoogleOAuthBtn"
+
 
 export const LogInPage = () => {
     const [request, setRequest] = useState(
@@ -38,6 +40,7 @@ export const LogInPage = () => {
         const URL = loginEndPoint;
         axios.post(URL, request)
         .then(res => {
+            console.log(res)
             if(res.status === 200){
                 const accessToken = res.data.access_token
                 setError(false);
@@ -136,12 +139,14 @@ export const LogInPage = () => {
                         Log In
                     </Button>   
                     
-                    <Link to="/auth/register" className="auth-link">You still don't have an account? register!</Link>
+                    <Link to="/auth/register" className="auth-link">You still don't have an account? Register!</Link>
                     {
                             error ? 
                                 <Alert className="alert login-error-alert" severity="error">{response}</Alert> 
                             : null
                     }
+                    
+                    <GoogleOAuthBtn/>
                 </Box>
 
             </Box>

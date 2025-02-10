@@ -60,7 +60,7 @@ const NewPostCard = ({propClass}) => {
             setVideoPreviewURL(null);
             setPhotoPreviewURL(fileURL);
         }else if(selectedFile && selectedFile.type.startsWith('video/')){
-            const fileURL = URL.createObjectURL(selectedFile);
+            const fileURL = URL.createObjectURL(selectedFile)
             setPhotoPreviewURL(null);
             setVideoPreviewURL(fileURL);
         }else {
@@ -92,7 +92,7 @@ const NewPostCard = ({propClass}) => {
             clearForm.clearFile()
             setPhotoPreviewURL(null);
             setVideoPreviewURL(null);
-            setTextSize(0)
+            setTextSize()
         })
         .catch(() =>{
             setError(true);

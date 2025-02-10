@@ -23,12 +23,14 @@ public class HttpConfig{
 
     private final AuthenticationProvider authenticationProvider;
     private final SecurityAuthFilter securityAuthFilter;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
-        configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:8080"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -48,6 +50,9 @@ public class HttpConfig{
                 )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(securityAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(oAuth2LoginSuccessHandler)
+                )
                 .build();
     }
 }
